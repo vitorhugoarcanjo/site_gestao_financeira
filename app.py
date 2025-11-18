@@ -1,6 +1,17 @@
 from flask import Flask, render_template
 
+# LOGIN
+from rotas.pasta_login.logica_login import bp_login
+
 app = Flask(__name__)
+
+
+
+# adicionar bluprints no app
+
+# LOGIN
+app.register_blueprint(bp_login, url_prefix="/login")
+
 
 @app.route('/')
 def appinicializar():
