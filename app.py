@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 
 # LOGIN
-from rotas.pasta_login.logica_login import bp_login
+from rotas.pasta_login.pasta_acesso_login.logica_login import bp_login
 
 app = Flask(__name__)
 

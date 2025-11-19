@@ -18,6 +18,7 @@ section .menu {
         border-radius: 10px;
         display: inline-block;
         transition: background-color 1s ease, transform 0.8s ease;
+        text-decoration: none;
     }
 
     .menu > a:hover {

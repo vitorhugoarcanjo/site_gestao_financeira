@@ -1,0 +1,25 @@
+
+
+/* ----------------------- INICIO CONTAINER LOGIN ------------------*/
+section .container_login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30vh;
+}
+
+    section .sub_container_login_fundo {
+        width: 30%;
+        display: flex;
+        justify-content: center;
+        background-color: cadetblue;
+
+    }
+    
+    section .sub_container_login {
+        display: grid;
+
+    }
+/* ----------------------- INICIO CONTAINER LOGIN ------------------*/
+
+
