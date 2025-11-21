@@ -11,13 +11,13 @@
     <h1>TELA DE CADASTRO ATIVO EM FLASK</h1>
 
     <!-- CONTAINER PARA CADASTRO -->
-    <section>
+    <section class="section_um">
         <form action="/cadastre_se" method="POST">
             <div class="container_menu">
                 
                 <div class="container_fundo">
                     
-                    <div>
+                    <div class="sub_container_menu">
                         <label>Nome:</label>
                         <input type="text" name="nome" placeholder="Insira seu nome" required>
 
@@ -33,8 +33,8 @@
                         <label>Validação da senha:</label>
                         <input type="password" name="confirmar_senha" placeholder="Insira novamente a senha" required>
 
-                        <button type="submit">CADASTRAR</button>
-                        <button type="reset">LIMPAR</button>
+                        <button type="submit" class="btn_cadastrar">CADASTRAR</button>
+                        <button type="reset" class="btn_limpar">LIMPAR</button>
                     </div>
                 </div>
             </div>
