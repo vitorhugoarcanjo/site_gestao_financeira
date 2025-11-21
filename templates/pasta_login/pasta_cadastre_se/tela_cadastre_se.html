@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_login/pasta_cadastre_se/import_todas_css.css') }}">
+
+</head>
+
+<body>
+    <h1>TELA DE CADASTRO ATIVO EM FLASK</h1>
+
+    <!-- CONTAINER PARA CADASTRO -->
+    <section>
+        <form action="/cadastre_se" method="POST">
+            <div class="container_menu">
+                
+                <div class="container_fundo">
+                    
+                    <div>
+                        <label>Nome:</label>
+                        <input type="text" name="nome" placeholder="Insira seu nome" required>
+
+                        <label>E-mail:</label>
+                        <input type="email" name="email" placeholder="Insira seu E-mail" required>
+
+                        <label>Telefone:</label>
+                        <input type="number" name="telefone" placeholder="Insira seu telefone" required>
+
+                        <label>Senha:</label>
+                        <input type="password" name="senha" placeholder="Insira uma senha" required>
+
+                        <label>Validação da senha:</label>
+                        <input type="password" name="confirmar_senha" placeholder="Insira novamente a senha" required>
+
+                        <button type="submit">CADASTRAR</button>
+                        <button type="reset">LIMPAR</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+    </section>
+
+
+
+
+
+</body>
+
+</html>
