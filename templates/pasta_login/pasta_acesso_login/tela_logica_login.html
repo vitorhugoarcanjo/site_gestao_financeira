@@ -10,25 +10,32 @@
 <body>
     <h1>FLASK ONLINE COM HTML - VAI SER TELA LOGIN</h1>
     <section>
-
-        <div class="container_login">
-            <div class="sub_container_login_fundo">
-
-                <div class="sub_container_login">
-
-                    <label>Digite seu nome ou E-mail:</label>
-                    <input type="text" name="" placeholder="Digite seu nome" required><br>
-
-                    <label>Digite sua senha:</label>
-                    <input type="password" name="" placeholder="Digite sua senha" required><br>
-
-                    <button type="submit">Acessar</button>
-
-                </div>
+        <form action="/login" method="post">
                 
-            </div>
-        </div>
+            <div class="container_login">
+                <div class="sub_container_login_fundo">
 
+                    <div class="sub_container_login">
+
+                        <label>Digite seu nome ou E-mail:</label>
+                        <input type="text" name="nome" placeholder="Digite seu nome" required><br>
+
+                        <label>Digite sua senha:</label>
+                        <input type="password" name="senha" placeholder="Digite sua senha" required><br>
+
+                        <button type="submit">Acessar</button>
+
+                    </div>
+                </div>
+            </div>
+
+            {% if erro %}
+            <div>
+                {{ erro }}
+            </div>
+            {% endif %}
+            
+        </form>
     </section>
 
 
