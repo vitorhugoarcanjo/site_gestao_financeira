@@ -1,6 +1,22 @@
-.nav_menu {
-    display: grid;
+
+.nav_menu .div_nav_menu {
+    margin-top: 10px;
+    text-align: center;
+    width: 100%;
 }
-a {
+
+.menu_a {
+    display: inline-block;
+    background-color: rgb(37, 129, 195);
+    color: #ffffff;
     text-decoration: none;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 10px;
+    transition: background-color 0.7s ease, transform 0.7s ease;
+}
+
+.menu_a:hover {
+    transform: scale(1.1);
+    background-color: rgb(16, 73, 151);
 }

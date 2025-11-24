@@ -9,10 +9,12 @@
 <body>
     <h1>Bem vindo {{ user_nome }}, ao Sistema de Gestão de Finanças!</h1>
     <nav class="nav_menu">
-        <a href="{{ url_for('pos_login.logout') }}">SAIR</a>
-        <a href="{{ url_for('financas.inifinancas')}}">💵 FINANÇAS</a>
-        <a href="{{ url_for('dashboard.inidashboard') }}">DASHBOARD</a>
-        <a href="{{ url_for('config.iniconfig') }}">CONFIGURAÇÕES</a>
+        <div class="div_nav_menu">
+            <a href="{{ url_for('pos_login.logout') }}" class="menu_a">⬅️ SAIR</a>
+            <a href="{{ url_for('financas.inifinancas') }}" class="menu_a">💵 FINANÇAS</a>
+            <a href="{{ url_for('dashboard.inidashboard') }}" class="menu_a">📊 DASHBOARD</a>
+            <a href="{{ url_for('config.iniconfig') }}" class="menu_a">⚙️ CONFIGURAÇÕES</a>
+        </div>
     </nav>
 
 </body>
