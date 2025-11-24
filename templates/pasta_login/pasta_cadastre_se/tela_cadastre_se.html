@@ -4,11 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='pasta_login/pasta_cadastre_se/import_todas_css.css') }}">
-
+    <script src="{{ url_for('static', filename='pasta_login/pasta_cadastre_se/telefone_js.js') }}"></script>
 </head>
 
 <body>
-    <h1>TELA DE CADASTRO ATIVO EM FLASK</h1>
+
+    {% with messages=get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+        
 
     <!-- CONTAINER PARA CADASTRO -->
     <section class="section_um">
@@ -25,7 +35,7 @@
                         <input type="email" name="email" placeholder="Insira seu E-mail" required>
 
                         <label>Telefone:</label>
-                        <input type="number" name="telefone" placeholder="Insira seu telefone" required>
+                        <input type="tel" name="telefone" placeholder="Insira seu telefone" oninput="formatarTelefone(this)" required>
 
                         <label>Senha:</label>
                         <input type="password" name="senha" placeholder="Insira uma senha" required>
@@ -35,6 +45,7 @@
 
                         <button type="submit" class="btn_cadastrar">CADASTRAR</button>
                         <button type="reset" class="btn_limpar">LIMPAR</button>
+                        <a href="{{ url_for('appinicializar') }}" class="btn_voltar">VOLTAR</a>
                     </div>
                 </div>
             </div>

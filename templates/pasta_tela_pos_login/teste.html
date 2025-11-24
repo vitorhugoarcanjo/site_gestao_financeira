@@ -2,10 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_tela_pos_login/import_todas_css.css') }}">
     <title>Document</title>
 </head>
 <body>
-    <h1>tela pós login</h1>
+    <h1>Bem vindo {{ user_nome }}, ao Sistema de Gestão de Finanças!</h1>
+    <nav class="nav_menu">
+        <a href="{{ url_for('pos_login.logout') }}">SAIR</a>
+        <a href="{{ url_for('financas.inifinancas')}}">💵 FINANÇAS</a>
+        <a href="{{ url_for('dashboard.inidashboard') }}">DASHBOARD</a>
+        <a href="{{ url_for('config.iniconfig') }}">CONFIGURAÇÕES</a>
+    </nav>
+
 </body>
 </html>

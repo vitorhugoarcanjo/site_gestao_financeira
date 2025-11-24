@@ -2,6 +2,7 @@
 
 /* ----------------------- INICIO CONTAINER LOGIN ------------------*/
 section .container_login {
+    margin-top: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,17 +10,68 @@ section .container_login {
 }
 
     section .sub_container_login_fundo {
-        width: 30%;
+        width: 33%;
         display: flex;
         justify-content: center;
-        background-color: cadetblue;
+        background-color: rgb(162, 204, 206);
+        height: 100%;
+        border-radius: 10px;
 
     }
     
     section .sub_container_login {
         display: grid;
-
+        align-content: center;
     }
-/* ----------------------- INICIO CONTAINER LOGIN ------------------*/
+/* ----------------------- FINAL CONTAINER LOGIN ------------------*/
 
 
+
+/* ----------------------- INICIO CONTAINER LABEL, INPUT - LOGIN ------------------*/
+.sub_container_login > label, input {
+    font-size: 20px;
+    text-align: center;
+}
+
+/* ----------------------- FINAL CONTAINER LABEL, INPUT - LOGIN ------------------*/
+
+
+
+/* ----------------------- INICIO CONTAINER BOTÕES LOGIN ------------------*/
+/* BOTOÕES - ACESSAR / VOLTAR */
+.sub_container_login > button, a {
+    text-align: center;
+    cursor: pointer;
+    padding: 6px;
+    font-family: Arial, Helvetica, sans-serif;          /* ← MESMA FONTE */
+    font-size: 20px;            /* ← MESMO TAMANHO DE FONTE */
+    transition: background-color 0.7s ease, transform 0.7s ease;
+}
+
+    /* BOTÃO - BUTTON */
+    .sub_container_login > button {
+        background-color: rgb(46, 114, 43);
+        color: aliceblue;
+        margin-bottom: 5px;
+        border: none;
+    }
+
+    .sub_container_login button:hover {
+        transform: scale(1.2);
+        background-color: rgb(83, 109, 30);
+    }
+
+
+
+    /* BOTÃO - A - */
+    .sub_container_login > a {
+        text-decoration: none;
+        background-color: coral;
+        color: blanchedalmond;
+    }
+
+    .sub_container_login a:hover {
+        transform: scale(1.2);
+        background-color: rgb(143, 86, 37);
+    }
+/* ----------------------- FINAL CONTAINER BOTÕES LOGIN ------------------*/

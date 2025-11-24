@@ -2,12 +2,14 @@
 .section_um .container_menu{
     display: flex;
     justify-content: center;
+    margin-top: 5px;
 }
 
     .container_fundo {
         display: flex;
         background-color: rgb(64, 116, 193);
         width: 30%;
+        border-radius: 10px;
     }
 
     .sub_container_menu {
@@ -37,7 +39,7 @@
 
 
 
-/* INICIO BOTÕES - CADASTRAR / LIMPAR*/
+/* INICIO BOTÕES - CADASTRAR / LIMPAR / VOLTAR */
 .sub_container_menu > button {
     margin-bottom: 5px;
     font-size: 20px;
@@ -67,6 +69,25 @@
     background-color: brown;
     transform: scale(1.2);
 }
+
+
+    /* BOTÃO VOLTAR */
+.sub_container_menu > .btn_voltar {
+    text-decoration: none;
+    padding: 3px;
+    font-size: 20px;
+    background-color: rgb(183, 177, 65);
+    margin-bottom: 5px;
+    color: black;
+    transition: background-color 0.7s ease, transform 0.7s ease;
+}
+
+.btn_voltar:hover {
+    background-color: yellow;
+    transform: scale(1.2);
+}
+
+
 /* FINAL BOTÕES - CADASTRAR / LIMPAR*/
 
 

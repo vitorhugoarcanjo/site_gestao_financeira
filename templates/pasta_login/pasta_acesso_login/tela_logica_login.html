@@ -8,7 +8,18 @@
 </head>
 
 <body>
-    <h1>FLASK ONLINE COM HTML - VAI SER TELA LOGIN</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{category}}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+
+
     <section>
         <form action="/login" method="post">
                 
@@ -18,24 +29,21 @@
                     <div class="sub_container_login">
 
                         <label>Digite seu nome ou E-mail:</label>
-                        <input type="text" name="nome" placeholder="Digite seu nome" required><br>
+                        <input type="text" name="nome_ou_email" placeholder="Digite seu nome ou E-mail"><br>
 
                         <label>Digite sua senha:</label>
-                        <input type="password" name="senha" placeholder="Digite sua senha" required><br>
+                        <input type="password" name="senha" placeholder="Digite sua senha"><br>
 
                         <button type="submit">Acessar</button>
+
+                        <a href="{{ url_for('appinicializar') }}">Voltar</a>
 
                     </div>
                 </div>
             </div>
-
-            {% if erro %}
-            <div>
-                {{ erro }}
-            </div>
-            {% endif %}
             
         </form>
+
     </section>
 
 
