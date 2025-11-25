@@ -6,14 +6,14 @@ section .container_login {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30vh;
+    height: 40vh;
 }
 
     section .sub_container_login_fundo {
-        width: 33%;
+        width: 36%;
         display: flex;
         justify-content: center;
-        background-color: rgb(162, 204, 206);
+        background-color: rgb(0, 40, 101);
         height: 100%;
         border-radius: 10px;
 
@@ -33,6 +33,10 @@ section .container_login {
     text-align: center;
 }
 
+.sub_container_login > label {
+    color: aliceblue;
+}
+
 /* ----------------------- FINAL CONTAINER LABEL, INPUT - LOGIN ------------------*/
 
 
@@ -49,29 +53,39 @@ section .container_login {
 }
 
     /* BOTÃO - BUTTON */
-    .sub_container_login > button {
-        background-color: rgb(46, 114, 43);
-        color: aliceblue;
+    .sub_container_login > .btn_submit {
+        background-color: #28a745;
         margin-bottom: 5px;
         border: none;
     }
 
-    .sub_container_login button:hover {
+    .sub_container_login .btn_submit:hover {
         transform: scale(1.2);
-        background-color: rgb(83, 109, 30);
+        background-color: #218838;
     }
 
+
+    .sub_container_login > .btn_limpar {
+        background-color: #dc3545;
+        margin-bottom: 5px;
+        border: none;
+    }
+
+    .sub_container_login .btn_limpar:hover {
+        transform: scale(1.2);
+        background-color: #c82333;
+    }
 
 
     /* BOTÃO - A - */
     .sub_container_login > a {
         text-decoration: none;
-        background-color: coral;
-        color: blanchedalmond;
+        background-color: #fd7e14;
+        color: black;
     }
 
     .sub_container_login a:hover {
         transform: scale(1.2);
-        background-color: rgb(143, 86, 37);
+        background-color: #e06c0b;
     }
 /* ----------------------- FINAL CONTAINER BOTÕES LOGIN ------------------*/
