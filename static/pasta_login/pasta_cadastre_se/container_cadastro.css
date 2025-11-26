@@ -41,12 +41,20 @@
 
 
 /* INICIO BOTÕES - CADASTRAR / LIMPAR / VOLTAR */
+.sub_container_menu > button, a {
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(0, 0, 0);
+}
+
+
+
 .sub_container_menu > button {
     margin-bottom: 5px;
     font-size: 20px;
     cursor: pointer;
     border: None;
     padding: 3px;
+    border-radius: 10px;
 }
 
     /* BOTÃO CADASTRAR */
@@ -79,7 +87,7 @@
     font-size: 20px;
     background-color: #fd7e14;
     margin-bottom: 5px;
-    color: black;
+    border-radius: 10px;
     transition: background-color 0.7s ease, transform 0.7s ease;
 }
 

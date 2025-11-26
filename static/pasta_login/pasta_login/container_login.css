@@ -50,6 +50,8 @@ section .container_login {
     font-family: Arial, Helvetica, sans-serif;          /* ← MESMA FONTE */
     font-size: 20px;            /* ← MESMO TAMANHO DE FONTE */
     transition: background-color 0.7s ease, transform 0.7s ease;
+    color: black;
+    border-radius: 10px;
 }
 
     /* BOTÃO - BUTTON */
@@ -81,7 +83,6 @@ section .container_login {
     .sub_container_login > a {
         text-decoration: none;
         background-color: #fd7e14;
-        color: black;
     }
 
     .sub_container_login a:hover {
