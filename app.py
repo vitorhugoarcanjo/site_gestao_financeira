@@ -35,7 +35,7 @@ app.secret_key = os.getenv('SECRET_KEY')
 
 
 
-# ---------------- ADICIONAR BLUEPRINTS ----------------------- #
+# ----------------- ADICIONAR BLUEPRINTS ----------------------- #
 # CADASTRE_SE
 app.register_blueprint(bp_cadastre_se, url_prefix="/cadastre_se")
 
