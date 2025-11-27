@@ -18,6 +18,7 @@ from rotas.pasta_tela_pos_login.tela_pos_login import bp_pos_login
 # PASTA FINANÇAS
 from rotas.pasta_financas.financas import bp_financas
 from rotas.pasta_financas.crud.insert_transacao import bp_insert_transacao
+from rotas.pasta_financas.crud.edit_transacao import bp_edit_transacao
 
 # PASTA DASHBOARD
 from rotas.pasta_dashboard.dashboard import bp_dashboard
@@ -48,6 +49,7 @@ app.register_blueprint(bp_pos_login, url_prefix="/pos_login")
 # FINANÇAS
 app.register_blueprint(bp_financas, url_prefix="/financas")
 app.register_blueprint(bp_insert_transacao, url_prefix='/nova_transacao')
+app.register_blueprint(bp_edit_transacao, url_prefix="/edit_transacoes")
 
 # DASHBOARD
 app.register_blueprint(bp_dashboard, url_prefix="/dashboard")

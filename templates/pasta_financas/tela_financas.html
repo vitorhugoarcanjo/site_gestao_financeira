@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='pasta_financas/import_todas_css.css') }}">
 </head>
 
-    <h1>TELA DE FINAÇAS ON COM FLASK</h1>
 
+    <!-- BLOCO DE CONSULTA -->
     <section class="section_um_consulta">
         <div class="container_consulta">
             <div class="sub_container_consulta">
@@ -58,30 +58,43 @@
             <table class="tabela_transacoes">
                 <thead>
                     <tr>
-                        <th>DATA</th>
                         <th>DESCRIÇÃO</th>
                         <th>CATEGORIA</th>
                         <th>VALOR</th>
+                        <th>DATA CRIAÇÃO</th>
                         <th>TIPO</th>
+                        <th>AÇÕES</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for transacao in transacoes %}
                     <tr>
-                        <td>{{ transacao[3] }}</td>  <!-- data -->
-                        <td>{{ transacao[2] }}</td>  <!-- descricao -->
-                        <td>{{ transacao[4] or "Geral" }}</td>  <!-- categoria -->
-                        <td class="{% if transacao[0] == 'receita' %}valor_positivo{% else %}valor_negativo{% endif %}">
+                        <td>{{ transacao[3] }}</td>  <!-- descricao -->
+                        <td>{{ transacao[5] or "Geral" }}</td>  <!-- categoria -->
+                        <td class="{% if transacao[1] == 'receita' %}valor_positivo{% else %}valor_negativo{% endif %}">
                             R$ {{ "%.2f"|format(transacao[1]) }}
                         </td>
+
+                        <td>{{ transacao[4] }}</td>  <!-- data -->
+
                         <td>
-                            {% if transacao[0] == 'receita' %}
+                            {% if transacao[1] == 'receita' %}
                                 📈 Entrada
                             {% else %}
                                 📉 Despesa
                             {% endif %}
                         </td>
                     </tr>
+
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('edit_transacoes.inieditar', transacao_id=transacao[0])}}">✏️</a>
+                            <a>❌</a>
+                        </td>
+                    </tr>
+
+
+
                     {% else %}
                     <tr>
                         <td colspan="5" style="text-align: center; padding: 20px;">
@@ -90,10 +103,13 @@
                         </td>
                     </tr>
                     {% endfor %}
+
                 </tbody>
             </table>
         </div>
     </section>
+
+
 
 
 </html>
