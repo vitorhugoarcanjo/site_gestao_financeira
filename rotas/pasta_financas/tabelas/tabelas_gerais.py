@@ -16,6 +16,7 @@ def tabela_transacoes():
     descricao TEXT,
     categoria TEXT,
     data DATE,
+    status TEXT DEFAULT 'aberto',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES cadastre_se(id) ON DELETE CASCADE
                    

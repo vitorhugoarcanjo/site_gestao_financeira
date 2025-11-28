@@ -87,8 +87,10 @@
 
                         <td>
                             <a href="{{ url_for('edit_transacoes.inieditar', transacao_id=transacao[0]) }}" title="Editar">✏️</a>
+
                             <a href="{{ url_for('deletar_transacao.inideletar', transacao_id=transacao[0]) }}" title="Excluir"
                             onclick="return confirm('Tem certeza que deseja excluir está transação?')">❌</a>
+                            
                         </td>
                     </tr>
 
