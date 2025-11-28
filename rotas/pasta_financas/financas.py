@@ -3,6 +3,11 @@ import sqlite3
 import os
 from rotas.middleware.autenticacao import login_required
 
+
+# FUNÇÃO PARA VALIDAÇÃO DATA E TIPO
+from rotas.pasta_financas.validacoes.financas.data import validacao_data
+
+
 bp_financas = Blueprint('financas', __name__)
 caminho_banco = os.path.join(os.getcwd(), 'instance', 'banco_de_dados.db')
 
@@ -10,18 +15,24 @@ caminho_banco = os.path.join(os.getcwd(), 'instance', 'banco_de_dados.db')
 @login_required
 def inifinancas():
     user_id = session['user_id']
-    
+    resultados = validacao_data(caminho_banco, user_id)
+
     conexao = sqlite3.connect(caminho_banco)
     cursor = conexao.cursor()
     
-    cursor.execute('''
-        SELECT id, tipo, valor, descricao, data, categoria, status
-        FROM transacoes 
-        WHERE user_id = ? 
-        ORDER BY data DESC
-    ''', (user_id,))
-    
-    transacoes = cursor.fetchall()
-    conexao.close()
+    if resultados:
+        return render_template('pasta_financas/tela_financas.html', resultados=resultados)
+
+
+    else:
+        cursor.execute('''
+            SELECT id, tipo, valor, descricao, data, categoria, status
+            FROM transacoes 
+            WHERE user_id = ? 
+            ORDER BY data DESC
+        ''', (user_id,))
+        
+        transacoes = cursor.fetchall()
+        conexao.close()
     
     return render_template('pasta_financas/tela_financas.html', transacoes=transacoes, user_nome=session.get('user_nome'))

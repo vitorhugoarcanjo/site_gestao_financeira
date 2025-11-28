@@ -9,47 +9,56 @@
 
     <!-- BLOCO DE CONSULTA -->
     <section class="section_um_consulta">
-        <div class="container_consulta">
-            <div class="sub_container_consulta">
-                
-                <div class="label_input">
-                    <label>DESCRIÇÃO:</label>
-                    <input type="text">
-                </div>
+        <form action=" {{ url_for('financas.inifinancas') }}" method="get">
+            <div class="container_consulta">
+                <div class="sub_container_consulta">
+                    
+                    <div class="label_input">
+                        <label>DESCRIÇÃO:</label>
+                        <input type="text">
+                    </div>
 
 
-                <div class="label_input">
-                    <label>Tipo:</label>
-                    <select>
-                        <option>Entrada</option>
-                        <option>Despesa</option>
-                    </select>
-                </div>
+                    <div class="label_input">
+                        <label>Tipo:</label>
+                        <select>
+                            <option>Entrada</option>
+                            <option>Despesa</option>
+                        </select>
+                    </div>
 
-                <div class="label_input">
-                    <label>DATA:</label>
-                    <input type="date">
-                </div>
+                    <div class="label_input">
+                        <label>DATA INICIAL:</label>
+                        <input type="date" name="data_inicio">
+                    </div>
 
-                <div class="buttons">
-                    <button type="submit">Consultar</button>
-                    <button type="reset">Limpar</button>
+                    <div class="label_input">
+                        <label>DATA FINAL:</label>
+                        <input type="date" name="data_final">
+                    </div>
+
+                    <div class="buttons">
+                        <button type="submit">Consultar</button>
+                        <button type="reset">Limpar</button>
+                    </div>
+                    
                 </div>
-                
             </div>
-        </div>
+        </form>
     </section>
 
 
     <!-- BOTÃO NOVA TRANSAÇÃO -->
-    <div style="text-align: center; margin: 20px 0;">
+    <div style="text-align: center; margin: 20px 0px;">
         <a href="{{ url_for('nova_transacao.initransacao') }}" 
-           style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+           style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px;">
            + NOVA TRANSAÇÃO
         </a>
+
+        <a href="{{ url_for('dashboard.inidashboard') }}" style="background: rgb(73, 64, 59); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">DASHBOARD</a>
+
+        <a href="{{ url_for('pos_login.iniposlogin') }}" style="background: rgb(73, 64, 59); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">VOLTAR</a>
     </div>
-
-
 
     
     <!-- SEÇÃO TABELA DE TRANSAÇÕES -->
@@ -107,11 +116,6 @@
                             
                         </td>
                     </tr>
-
-                    
-
-                    
-
 
 
                     {% else %}
