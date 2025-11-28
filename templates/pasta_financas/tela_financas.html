@@ -72,7 +72,7 @@
                         <td>{{ transacao[3] }}</td>  <!-- descricao -->
                         <td>{{ transacao[5] or "Geral" }}</td>  <!-- categoria -->
                         <td class="{% if transacao[1] == 'receita' %}valor_positivo{% else %}valor_negativo{% endif %}">
-                            R$ {{ "%.2f"|format(transacao[1]) }}
+                            R$ {{ "%.2f"|format(transacao[2]) }}
                         </td>
 
                         <td>{{ transacao[4] }}</td>  <!-- data -->
@@ -84,14 +84,17 @@
                                 📉 Despesa
                             {% endif %}
                         </td>
-                    </tr>
 
-                    <tr>
                         <td>
-                            <a href="{{ url_for('edit_transacoes.inieditar', transacao_id=transacao[0])}}">✏️</a>
-                            <a>❌</a>
+                            <a href="{{ url_for('edit_transacoes.inieditar', transacao_id=transacao[0]) }}" title="Editar">✏️</a>
+                            <a href="{{ url_for('deletar_transacao.inideletar', transacao_id=transacao[0]) }}" title="Excluir"
+                            onclick="return confirm('Tem certeza que deseja excluir está transação?')">❌</a>
                         </td>
                     </tr>
+
+                    
+
+                    
 
 
 
