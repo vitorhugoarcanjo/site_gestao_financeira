@@ -15,14 +15,15 @@ def initransacao():
         valor = float(request.form.get('valor'))
         descricao = request.form.get('descricao')
         data = request.form.get('data')
+        status = 'recebido' if tipo == 'receita' else 'aberto'
         
         # INSERT SIMPLES
         conexao = sqlite3.connect(caminho_banco)
         cursor = conexao.cursor()
         cursor.execute('''
-            INSERT INTO transacoes (user_id, tipo, valor, descricao, data)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (user_id, tipo, valor, descricao, data))
+            INSERT INTO transacoes (user_id, tipo, valor, descricao, data, status)
+            VALUES (?, ?, ?, ?, ?, ?)
+        ''', (user_id, tipo, valor, descricao, data, status))
         conexao.commit()
         conexao.close()
         

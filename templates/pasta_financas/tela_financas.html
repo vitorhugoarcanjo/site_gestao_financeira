@@ -59,6 +59,7 @@
                 <thead>
                     <tr>
                         <th>DESCRIÇÃO</th>
+                        <th>STATUS</th>
                         <th>CATEGORIA</th>
                         <th>VALOR</th>
                         <th>DATA CRIAÇÃO</th>
@@ -70,6 +71,19 @@
                     {% for transacao in transacoes %}
                     <tr>
                         <td>{{ transacao[3] }}</td>  <!-- descricao -->
+
+
+                        <td>
+                            {% if transacao[1] == 'despesa' %}
+                                {% if transacao[6] == 'aberto' %}
+                                    <span style="background: #ff4444; color: white; padding: 3px 8px; border-radius: 10px;">ABERTO</span>
+                                {% elif transacao[6] == 'quitado' %}
+                                    <span style="background: #00C851; color: white; padding: 3px 8px; border-radius: 10px;">QUITADO</span>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+
+
                         <td>{{ transacao[5] or "Geral" }}</td>  <!-- categoria -->
                         <td class="{% if transacao[1] == 'receita' %}valor_positivo{% else %}valor_negativo{% endif %}">
                             R$ {{ "%.2f"|format(transacao[2]) }}

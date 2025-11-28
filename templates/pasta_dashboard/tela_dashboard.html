@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINANÇAS ON</title>
+</head>
+<body>
+    <form action="/dashboard" method="get">
+        <label for="data_inicio">DATA INICIO</label>
+        <input type="date" name="data_inicio" value="{{ data_inicio }}">
+
+        <label for="data_final">DATA FINAL</label>
+        <input type="date" name="data_final" value="{{ data_final }}">
+
+        <button type="submit">Pesquisar</button>
+
+        <h3>Receitas: R$ {{ total_receitas }}</h3>
+        <h3>Despesas: R$ {{ total_despesas }}</h3>
+        <h3>Saldo: R$ {{ saldo }}</h3>
+    </form>
+</body>
+</html>
