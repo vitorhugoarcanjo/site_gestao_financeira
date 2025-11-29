@@ -15,26 +15,27 @@
                     
                     <div class="label_input">
                         <label>DESCRIÇÃO:</label>
-                        <input type="text">
+                        <input type="text" name="descricao" value="{{ request.args.get('descricao', '') }}">
                     </div>
 
 
                     <div class="label_input">
                         <label>Tipo:</label>
-                        <select>
-                            <option>Entrada</option>
-                            <option>Despesa</option>
+                        <select name="tipo">
+                            <option value="" {% if request.args.get('tipo') == '' %}selected{% endif %}>Todos</option>
+                            <option value="receita" {% if request.args.get('tipo') == 'receita' %}selected{% endif %}>Entrada</option>
+                            <option value="despesa" {% if request.args.get('tipo') == 'despesa' %}selected{% endif %}>Despesa</option>
                         </select>
                     </div>
 
                     <div class="label_input">
                         <label>DATA INICIAL:</label>
-                        <input type="date" name="data_inicio">
+                        <input type="date" name="data_inicio" value="{{ request.args.get('data_inicio', '') }}">
                     </div>
 
                     <div class="label_input">
                         <label>DATA FINAL:</label>
-                        <input type="date" name="data_final">
+                        <input type="date" name="data_final" value="{{ request.args.get('data_final', '') }}">
                     </div>
 
                     <div class="buttons">
@@ -113,6 +114,15 @@
 
                             <a href="{{ url_for('deletar_transacao.inideletar', transacao_id=transacao[0]) }}" title="Excluir"
                             onclick="return confirm('Tem certeza que deseja excluir está transação?')">❌</a>
+
+                            {% if transacao[1] == 'despesa' and transacao[6] == 'aberto' %}
+                                <a href="{{ url_for('quitar_transacao.iniquitacao', transacao_id=transacao[0]) }}" 
+                                style="background: #00C851; color: white; padding: 3px 8px; text-decoration: none; border-radius: 5px; margin-left: 5px;"
+                                title="Quitar despesa"
+                                onclick="return confirm('Quitar esta despesa?')">
+                                ✅ Quitar
+                                </a>
+                            {% endif %}
                             
                         </td>
                     </tr>

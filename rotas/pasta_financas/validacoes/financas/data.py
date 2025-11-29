@@ -1,28 +1,37 @@
 import sqlite3
-from flask import Flask, request
+from flask import request
 
 
 def validacao_data(caminho_banco, user_id):
     data_inicio = request.args.get('data_inicio')
     data_final = request.args.get('data_final')
+    descricao = request.args.get('descricao')
+    tipo = request.args.get('tipo')
 
     conexao_banco = sqlite3.connect(caminho_banco)
     cursor = conexao_banco.cursor()
 
-    query = 'SELECT * FROM transacoes WHERE user_id = ? AND tipo = ?'
-    params_despesas = [user_id, 'despesa']
-    params_receitas = [user_id, 'receita']
+    query = 'SELECT id, tipo, valor, descricao, data, categoria, status FROM transacoes WHERE user_id = ?'
+    params = [user_id]
 
     if data_inicio and data_final:
         query += ' AND data BETWEEN ? AND ?'
-        params_despesas.extend([data_inicio, data_final])
-        params_receitas.extend([data_inicio, data_final])
+        params.extend([data_inicio, data_final])
 
-    cursor.execute(query, params_despesas)
-    list_despesas = cursor.fetchall()
+    # DESCRIÇÃO
+    if descricao:
+        query += ' AND descricao LIKE ?'
+        params.append(f'%{descricao}%')
 
-    cursor.execute(query, params_receitas)
-    list_receitas = cursor.fetchall()
+    # RECEITA OU DESPESA
+    if tipo:
+        query += ' AND tipo = ?'
+        params.append(tipo)
+
+    query += ' ORDER BY data DESC' # ORDENA AQUI
+
+    cursor.execute(query, params)
+    transacoes = cursor.fetchall()
 
 
-    return (list_despesas, list_receitas)
+    return transacoes

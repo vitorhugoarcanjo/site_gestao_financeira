@@ -3,21 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FINANÇAS ON</title>
+    <title>Dashboard - Finanças</title>
+    <style>
+        .dashboard {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .filtros {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .receita { border-left: 5px solid #28a745; }
+        .despesa { border-left: 5px solid #dc3545; }
+        .saldo { border-left: 5px solid #007bff; }
+        .valor {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .positivo { color: #28a745; }
+        .negativo { color: #dc3545; }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        label { display: block; margin: 10px 0 5px; }
+        input { padding: 8px; margin-bottom: 10px; }
+    </style>
 </head>
 <body>
-    <form action="/dashboard" method="get">
-        <label for="data_inicio">DATA INICIO</label>
-        <input type="date" name="data_inicio" value="{{ data_inicio }}">
+    <div class="dashboard">
+        <div class="filtros">
+            <form action="/dashboard" method="get">
+                <label>Data Início:</label>
+                <input type="date" name="data_inicio" value="{{ data_inicio }}">
+                
+                <label>Data Final:</label>
+                <input type="date" name="data_final" value="{{ data_final }}">
+                
+                <button type="submit">🔍 Filtrar</button>
+                <button><a href="{{ url_for('pos_login.iniposlogin') }}">Voltar</a></button>
+            </form>
+        </div>
 
-        <label for="data_final">DATA FINAL</label>
-        <input type="date" name="data_final" value="{{ data_final }}">
-
-        <button type="submit">Pesquisar</button>
-
-        <h3>Receitas: R$ {{ total_receitas }}</h3>
-        <h3>Despesas: R$ {{ total_despesas }}</h3>
-        <h3>Saldo: R$ {{ saldo }}</h3>
-    </form>
+        <div class="cards">
+            <div class="card receita">
+                <h3>📈 Receitas</h3>
+                <div class="valor positivo">R$ {{ "%.2f"|format(total_receitas) }}</div>
+                <p>Total de entradas</p>
+            </div>
+            
+            <div class="card despesa">
+                <h3>📉 Despesas</h3>
+                <div class="valor negativo">R$ {{ "%.2f"|format(total_despesas) }}</div>
+                <p>Total de saídas</p>
+            </div>
+            
+            <div class="card saldo">
+                <h3>💰 Saldo</h3>
+                <div class="valor {% if saldo >= 0 %}positivo{% else %}negativo{% endif %}">
+                    R$ {{ "%.2f"|format(saldo) }}
+                </div>
+                <p>Resultado final</p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
