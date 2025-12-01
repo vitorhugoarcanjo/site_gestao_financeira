@@ -1,20 +1,20 @@
 /* INICIO - ESTRUTURA DO CONTAINER CADASTRO */
-.section_um .container_menu{
+.container_menu{
     display: flex;
     justify-content: center;
-    margin-top: 5px;
 }
 
     .container_fundo {
         display: flex;
-        background-color: rgb(0, 40, 101);
-        width: 30%;
+        background-color: rgb(255, 255, 255);
+        width: 17rem;
         border-radius: 10px;
     }
 
     .sub_container_menu {
         display: grid;
         width: 100%;
+        padding: 5px;
         justify-content: center;
         text-align: center;
     }
@@ -22,13 +22,10 @@
 /* FINAL - ESTRUTURA DO CONTAINER CADASTRO */
 
 
-
-
-
 /* INICIO - LABEL E INPUT */
 .sub_container_menu > label {
     font-size: 25px;
-    color: aliceblue;
+    color: rgb(0, 0, 0);
 }
 
 .sub_container_menu > input {
