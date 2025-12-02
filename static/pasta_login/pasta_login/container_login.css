@@ -28,12 +28,13 @@ section .container_login {
 
 
 /* ----------------------- INICIO CONTAINER LABEL, INPUT - LOGIN ------------------*/
-.sub_container_login > label, input {
-    font-size: 1.5rem;
+.sub_container_login > input {
+    font-size: 15px;
     text-align: center;
 }
 
 .sub_container_login > label {
+    font-size: 25px;
     color: rgb(0, 0, 0);
 }
 
