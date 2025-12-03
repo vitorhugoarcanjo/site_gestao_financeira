@@ -3,27 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_financas/crud/insert_transacao.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_financas/crud/pasta_insert/import_css.css') }}">
 
 </head>
 
 <body>
-    <h1>NOVA TRANSAÇÃO</h1>
-
-    <section>
+    <section class="container_insert">
         <form action="/nova_transacao" method="post">
-            <select name="tipo" required>
-                <option value="receita">📈 Receita</option>
-                <option value="despesa">📉 Despesa</option>
-            </select>
+            <h1>NOVA TRANSAÇÃO</h1>
 
-            <input type="number" name="valor" step="0.01" placeholder="R$ 0,00" required>
-            <input type="text" name="descricao" placeholder="Descrição" required>
-            <input type="date" name="data" required>
+            <div class="sub_container_insert">
+                <select name="tipo" required>
+                    <option value="receita">📈 Receita</option>
+                    <option value="despesa">📉 Despesa</option>
+                </select>
 
-            <button type="submit">💾 Salvar</button>
-            <button type="reset">🧹 Limpar</button>
+                <div class="container_campos_insert">
+                    <label for="valor_total">VALOR:</label>
+                    <input type="number" name="valor_total" step="0.01" placeholder="R$ 0,00" required>
+                </div>
 
+                <div class="container_campos_insert">
+                    <label for="total_parcelas">QUANTAS PARCELAS:</label>
+                    <input type="number" name="total_parcelas">
+                </div>
+
+                <div class="container_campos_insert">
+                    <label for="descricao">DESCRIÇÃO:</label>
+                    <input type="text" name="descricao" placeholder="Descrição" required>
+                </div>
+
+                <div class="container_campos_insert">
+                    <label for="data_emissao">DATA EMISSÃO:</label>
+                    <input type="date" name="data_emissao" required>
+                </div>
+                
+                <div class="container_campos_insert">
+                    <label for="data_vencimento">DATA VENCIMENTO:</label>
+                    <input type="date" name="data_vencimento">
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button type="submit" class="btn_salvar">💾 Salvar</button>
+                <button type="reset" class="btn_limpar">🧹 Limpar</button>
+            </div>
 
         </form>
     </section>

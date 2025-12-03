@@ -21,12 +21,12 @@ def inidashboard():
         cursor = conexao_banco.cursor()
 
 
-        query = 'SELECT SUM(valor) FROM transacoes WHERE user_id = ? AND tipo = ?'
+        query = 'SELECT SUM(valor_total) FROM transacoes WHERE user_id = ? AND tipo = ?'
         params_despesas = [user_id, 'despesa']
         params_receitas = [user_id, 'receita']
 
         if data_inicio and data_final:
-            query += ' AND data BETWEEN ? AND ?'
+            query += ' AND data_emissao BETWEEN ? AND ?'
             params_despesas.extend([data_inicio, data_final])
             params_receitas.extend([data_inicio, data_final])
 

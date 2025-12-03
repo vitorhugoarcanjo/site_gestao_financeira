@@ -37,13 +37,14 @@
                         <label>DATA FINAL:</label>
                         <input type="date" name="data_final" value="{{ request.args.get('data_final', '') }}">
                     </div>
-
-                    <div class="buttons">
-                        <button type="submit">Consultar</button>
-                        <button type="reset">Limpar</button>
-                    </div>
                     
                 </div>
+                
+                <div class="buttons">
+                    <button type="submit" class="btn_consultar">Consultar</button>
+                    <button type="reset" class="btn_limpar">Limpar</button>
+                </div>
+
             </div>
         </form>
     </section>

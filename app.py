@@ -1,6 +1,8 @@
 from flask import Flask, render_template
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv # CHAVE SECRETA
+from datetime import timedelta # TEMPO DE LOGIN
+
 
 # CRIAÇÃO DE TABELAS
 from config.database import criar_todas_tabelas
@@ -35,7 +37,7 @@ app = Flask(__name__)
 
 app.secret_key = os.getenv('SECRET_KEY')
 
-
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
 
 # ----------------- ADICIONAR BLUEPRINTS ----------------------- #

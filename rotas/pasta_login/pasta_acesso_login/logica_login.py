@@ -37,6 +37,7 @@ def validar_login():
             conexao_banco.close()
 
             # SETAR NA SESSÃO
+            session.permanent = True
             session['user_id'] = usuario[0] # ID do usuário
             session['user_nome'] = usuario[1] # Nome do usuário
 
