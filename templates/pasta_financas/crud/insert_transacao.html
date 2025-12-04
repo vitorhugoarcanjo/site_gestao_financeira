@@ -10,7 +10,9 @@
 <body>
     <section class="container_insert">
         <form action="/nova_transacao" method="post">
-            <h1>NOVA TRANSAÇÃO</h1>
+            <div class="h1_transacao">
+                <h1>NOVA TRANSAÇÃO</h1>
+            </div>
 
             <div class="sub_container_insert">
                 <select name="tipo" required>
@@ -22,15 +24,15 @@
                     <label for="valor_total">VALOR:</label>
                     <input type="number" name="valor_total" step="0.01" placeholder="R$ 0,00" required>
                 </div>
+                
+                <div class="container_campos_insert">
+                    <label for="descricao">DESCRIÇÃO:</label>
+                    <input type="text" name="descricao" placeholder="Descrição" required>
+                </div>
 
                 <div class="container_campos_insert">
                     <label for="total_parcelas">QUANTAS PARCELAS:</label>
                     <input type="number" name="total_parcelas">
-                </div>
-
-                <div class="container_campos_insert">
-                    <label for="descricao">DESCRIÇÃO:</label>
-                    <input type="text" name="descricao" placeholder="Descrição" required>
                 </div>
 
                 <div class="container_campos_insert">
@@ -45,11 +47,18 @@
             </div>
 
             <div class="buttons">
-                <button type="submit" class="btn_salvar">💾 Salvar</button>
-                <button type="reset" class="btn_limpar">🧹 Limpar</button>
+                <button type="submit" class="btn_salvar">💾 SALVAR</button>
+                <button type="reset" class="btn_limpar">🧹 LIMPAR</button>
+                <a href="{{ url_for('financas.inifinancas') }}" class="btn_voltar">⬅️ VOLTAR</a>
             </div>
 
         </form>
+    </section>
+
+    <section class="container_parcelas">
+        <div class="sub_container_parcelas">
+            <h1>CONTAINER - GERAÇÃO DAS PARCELAS (em construção)</h1>
+        </div>
     </section>
 
 

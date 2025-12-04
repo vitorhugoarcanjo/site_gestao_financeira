@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, session, request
 import sqlite3
 import os
 from rotas.middleware.autenticacao import login_required
-
+from datetime import date
 
 # FUNÇÃO PARA VALIDAÇÃO DATA E TIPO
 from rotas.pasta_financas.validacoes.financas.data import validacao_data
@@ -14,11 +14,12 @@ caminho_banco = os.path.join(os.getcwd(), 'instance', 'banco_de_dados.db')
 @bp_financas.route('/')
 @login_required
 def inifinancas():
+    hoje = date.today().isoformat()
     user_id = session['user_id']
 
     # pega filtros diretamente
-    data_inicio = request.args.get('data_inicio')
-    data_final = request.args.get('data_final')
+    data_inicio = request.args.get('data_inicio', hoje)
+    data_final = request.args.get('data_final', hoje)
     descricao = request.args.get('descricao')
     tipo = request.args.get('tipo')
 
@@ -45,4 +46,4 @@ def inifinancas():
 
 
     
-    return render_template('pasta_financas/tela_financas.html', transacoes=transacoes, user_nome=session.get('user_nome'))
+    return render_template('pasta_financas/tela_financas.html', hoje=hoje, data_final=data_final, data_inicio=data_inicio,transacoes=transacoes, user_nome=session.get('user_nome'))
