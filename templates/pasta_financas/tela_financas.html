@@ -50,18 +50,19 @@
     </section>
 
 
-    <!-- BOTÃO NOVA TRANSAÇÃO -->
-    <div style="text-align: center; margin: 20px 0px;">
-        <a href="{{ url_for('nova_transacao.initransacao') }}" 
-           style="background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 5px;">
-           + NOVA TRANSAÇÃO
-        </a>
+    <!-- BOTOES TELAS -->
+    <section class="section_botoes_telas">
+        <!-- BOTÃO NOVA TRANSAÇÃO -->
+        <div class="container_botoes_telas">
+            <a href="{{ url_for('nova_transacao.initransacao') }}">
+            + NOVA TRANSAÇÃO
+            </a>
 
-        <a href="{{ url_for('dashboard.inidashboard') }}" style="background: rgb(73, 64, 59); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">DASHBOARD</a>
+            <a href="{{ url_for('dashboard.inidashboard') }}">DASHBOARD</a>
 
-        <a href="{{ url_for('pos_login.iniposlogin') }}" style="background: rgb(73, 64, 59); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">VOLTAR</a>
-    </div>
-
+            <a href="{{ url_for('pos_login.iniposlogin') }}">VOLTAR</a>
+        </div>
+    </section>
     
     <!-- SEÇÃO TABELA DE TRANSAÇÕES -->
     <section class="section_tabela">
@@ -69,11 +70,12 @@
             <table class="tabela_transacoes">
                 <thead>
                     <tr>
+                        <th>VALOR</th>
                         <th>DESCRIÇÃO</th>
                         <th>STATUS</th>
                         <th>CATEGORIA</th>
-                        <th>VALOR</th>
                         <th>DATA CRIAÇÃO</th>
+                        <th>DATA VENCIMENTO</th>
                         <th>TIPO</th>
                         <th>AÇÕES</th>
                     </tr>
@@ -81,9 +83,15 @@
                 <tbody>
                     {% for transacao in transacoes %}
                     <tr>
-                        <td>{{ transacao[3] }}</td>  <!-- descricao -->
+                        <!-- VALOR TOTAL -->
+                        <td class="{% if transacao[1] == 'receita' %}valor_positivo{% else %}valor_negativo{% endif %}">
+                            R$ {{ "%.2f"|format(transacao[2]) }}
+                        </td>
 
+                        <!-- descricao -->
+                        <td>{{ transacao[3] }}</td>  
 
+                        <!-- status -->
                         <td>
                             {% if transacao[1] == 'despesa' %}
                                 {% if transacao[6] == 'aberto' %}
@@ -94,14 +102,16 @@
                             {% endif %}
                         </td>
 
+                        <!-- categoria -->
+                        <td>{{ transacao[5] or "Geral" }}</td>
 
-                        <td>{{ transacao[5] or "Geral" }}</td>  <!-- categoria -->
-                        <td class="{% if transacao[1] == 'receita' %}valor_positivo{% else %}valor_negativo{% endif %}">
-                            R$ {{ "%.2f"|format(transacao[2]) }}
-                        </td>
+                        <!-- data emissão -->
+                        <td>{{ transacao[4] }}</td>
 
-                        <td>{{ transacao[4] }}</td>  <!-- data -->
+                        <!-- data vencimento -->
+                        <td>{{ transacao[7] }}</td>
 
+                        <!-- tipo -->
                         <td>
                             {% if transacao[1] == 'receita' %}
                                 📈 Entrada
@@ -110,6 +120,7 @@
                             {% endif %}
                         </td>
 
+                        <!-- ações -->
                         <td>
                             <a href="{{ url_for('edit_transacoes.inieditar', transacao_id=transacao[0]) }}" title="Editar">✏️</a>
 

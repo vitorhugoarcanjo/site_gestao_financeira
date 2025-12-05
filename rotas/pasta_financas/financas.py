@@ -34,7 +34,7 @@ def inifinancas():
         cursor = conexao.cursor()
 
         cursor.execute('''
-            SELECT id, tipo, valor_total, descricao, data_emissao, categoria, status
+            SELECT id, tipo, valor_total, descricao, data_emissao, categoria, status, data_vencimento
             FROM transacoes 
             WHERE user_id = ? 
             ORDER BY data_emissao DESC

@@ -11,7 +11,7 @@ def validacao_data(caminho_banco, user_id):
     conexao_banco = sqlite3.connect(caminho_banco)
     cursor = conexao_banco.cursor()
 
-    query = 'SELECT id, tipo, valor_total, descricao, data_emissao, categoria, status FROM transacoes WHERE user_id = ?'
+    query = 'SELECT id, tipo, valor_total, descricao, data_emissao, categoria, status, data_vencimento FROM transacoes WHERE user_id = ?'
     params = [user_id]
 
     if data_inicio and data_final:

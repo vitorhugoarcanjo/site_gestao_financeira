@@ -29,10 +29,15 @@
     }
     /* ESTRUTURA DA NOVA TRANSAÇÃO */
 
+    
     /* CONTAINER ESTRUTURA - LABEL, INPUT E SELECT */
     .container_campos_insert {
         display: grid;
         margin-bottom: 15px;
+    }
+
+    .container_campos_insert input {
+        font-size: 1rem;
     }
     /* CONTAINER ESTRUTURA - LABEL, INPUT E SELECT */
 
