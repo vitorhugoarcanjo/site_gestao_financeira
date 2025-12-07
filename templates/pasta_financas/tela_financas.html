@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_financas/import_todas_css.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_financas/financas/import_todas_css.css') }}">
 </head>
 
 
@@ -54,13 +54,13 @@
     <section class="section_botoes_telas">
         <!-- BOTÃO NOVA TRANSAÇÃO -->
         <div class="container_botoes_telas">
-            <a href="{{ url_for('nova_transacao.initransacao') }}">
-            + NOVA TRANSAÇÃO
+            <a href="{{ url_for('nova_transacao.initransacao') }}" class="btn_novo">
+            ✚ NOVO
             </a>
 
-            <a href="{{ url_for('dashboard.inidashboard') }}">DASHBOARD</a>
+            <a href="{{ url_for('dashboard.inidashboard') }}" class="btn_dashboard" target="_blank">DASHBOARD</a>
 
-            <a href="{{ url_for('pos_login.iniposlogin') }}">VOLTAR</a>
+            <a href="{{ url_for('pos_login.iniposlogin') }}" class="btn_voltar">VOLTAR</a>
         </div>
     </section>
     
