@@ -2,6 +2,7 @@ from flask import Flask, render_template
 import os
 from dotenv import load_dotenv # CHAVE SECRETA
 from datetime import timedelta # TEMPO DE LOGIN
+from utils.versao_nova_cache import get_static_version # limpar cache por hora
 
 
 # CRIAÇÃO DE TABELAS
@@ -67,6 +68,15 @@ app.register_blueprint(bp_config, url_prefix="/config")
 @app.route('/')
 def appinicializar():
     return render_template('pasta_tela_inicial/paginainicial.html')
+
+
+@app.context_processor
+def inject_version():
+    return {
+        'css_version': get_static_version(),  # ← Chama a função
+        'app_version': '1.0.0'
+    }
+
 
 # INICIALIZA O APP
 if __name__ == '__main__':
