@@ -20,16 +20,19 @@ from rotas.pasta_tela_pos_login.tela_pos_login import bp_pos_login
 
 # PASTA FINANÇAS
 from rotas.pasta_financas.financas import bp_financas
-from rotas.pasta_financas.crud.insert_transacao import bp_insert_transacao
-from rotas.pasta_financas.crud.edit_transacao import bp_edit_transacao
-from rotas.pasta_financas.crud.delete_transacao import bp_delete
-from rotas.pasta_financas.crud.quitar_transacao import bp_quitar
+from rotas.pasta_financas.crud.pasta_insert.insert_transacao import bp_insert_transacao
+from rotas.pasta_financas.crud.pasta_edit.edit_transacao import bp_edit_transacao
+from rotas.pasta_financas.crud.pasta_delete.delete_transacao import bp_delete
+from rotas.pasta_financas.crud.pasta_quitar.quitar_transacao import bp_quitar
 
 # PASTA DASHBOARD
 from rotas.pasta_dashboard.dashboard import bp_dashboard
 
 # PASTA CONFIGURACOES
 from rotas.pasta_config.config import bp_config
+
+# PASTA TAREFAS
+from rotas.pasta_tarefas.tela_tarefas import bp_tela_tarefas
 
 load_dotenv()
 
@@ -64,6 +67,8 @@ app.register_blueprint(bp_dashboard, url_prefix="/dashboard")
 # CONFIGURACOES
 app.register_blueprint(bp_config, url_prefix="/config")
 
+# TAREFAS
+app.register_blueprint(bp_tela_tarefas, url_prefix="/tarefas")
 
 @app.route('/')
 def appinicializar():

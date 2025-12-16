@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_tarefas/tela_tarefas/import_css.css') }}">
+    <title>GESTÃO TAREFAS</title>
+</head>
+
+<main>
+    <section class="section_cabecalho">
+        <div class="sec_cab_container_fundo">
+            <div class="sec_cab_sub_container">
+
+                <div class="usuario_logado">
+                    <p>Usuário Logado: {{ user_nome }}</p>
+                </div>
+
+                <div class="titulo">
+                    <h1 class="h1">TELA DE TAREFAS ON</h1>
+                </div>
+
+                <div class="menu">
+                    <div class="btn_voltar">
+                        <span>↩️</span>
+                        <a href="{{ url_for('pos_login.iniposlogin') }}">VOLTAR</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+</main>
+</html>
