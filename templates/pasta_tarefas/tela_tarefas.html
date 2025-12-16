@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_tarefas/tela_tarefas/import_css.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_tarefas/import_css.css') }}">
     <title>GESTÃO TAREFAS</title>
 </head>
 
 <main>
+    <!-- SECÃO DO CABEÇALHO -->
     <section class="section_cabecalho">
         <div class="sec_cab_container_fundo">
             <div class="sec_cab_sub_container">
@@ -17,13 +18,12 @@
                 </div>
 
                 <div class="titulo">
-                    <h1 class="h1">TELA DE TAREFAS ON</h1>
+                    <h1 class="h1">TAREFAS</h1>
                 </div>
 
                 <div class="menu">
                     <div class="btn_voltar">
-                        <span>↩️</span>
-                        <a href="{{ url_for('pos_login.iniposlogin') }}">VOLTAR</a>
+                        <a href="{{ url_for('pos_login.iniposlogin') }}"><span>↩️</span>VOLTAR</a>
                     </div>
                 </div>
 
@@ -31,6 +31,39 @@
         </div>
     </section>
 
+    <!-- SECÃO DA CONSULTA -->
+    <section class="section_consulta">
+        <div class="sec_con_container_fundo">
+            <div class="sec_con_sub_container">
+                <div class="titulo">
+                    <h3>CONSULTE SUA TAREFA</h3>
+                </div>
+
+                <div class="label_input">
+                    <div class="sub_label_input">
+                        <label>Descrição:</label>
+                        <input>
+                    </div>
+
+                    <div class="sub_label_input">
+                        <label>DATA INICIO:</label>
+                        <input type="date">
+                    </div>
+
+                    <div class="sub_label_input">
+                        <label>DATA FINAL:</label>
+                        <input type="date">
+                    </div>
+                </div>
+
+                <div class="botoes">
+                    <button type="submit" class="btn_consultar">CONSULTAR</button>
+                    <button type="reset" class="btn_limpar">LIMPAR</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
 
 </main>
 </html>

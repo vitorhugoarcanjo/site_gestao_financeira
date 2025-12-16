@@ -4,6 +4,7 @@
     background-color: blanchedalmond;
     display: flex;
     width: 100%;
+    margin-bottom: 5px;
 }
 
 .sec_cab_container_fundo {
@@ -42,9 +43,13 @@ a {
 /* MENU BOTOES */
 
 
-
 /* TITULO */
 .sec_cab_sub_container h1 {
+    display: flex;
+    justify-content: center;
+}
+
+.sec_cab_sub_container .titulo {
     display: flex;
     justify-content: center;
 }

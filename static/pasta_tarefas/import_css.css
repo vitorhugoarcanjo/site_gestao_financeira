@@ -1,0 +1,7 @@
+/* IMPORTS DO CABEÇALHO */
+@import url('/static/pasta_tarefas/tela_tarefas/estrutura_global.css');
+@import url('/static/pasta_tarefas/tela_tarefas/cabecalho.css');
+
+
+/* IMPORTS DA TELA DE CONSULTA */
+@import url('/static/pasta_tarefas/tela_consulta/estrutura_consulta.css');
