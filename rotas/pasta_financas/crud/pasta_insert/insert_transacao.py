@@ -1,5 +1,8 @@
 from flask import Blueprint, render_template, request, session, redirect, url_for, flash
 from rotas.middleware.autenticacao import login_required
+
+# IMPORTS
+
 import os, sqlite3
 from datetime import date
 
@@ -18,9 +21,9 @@ def initransacao():
         descricao = request.form.get('descricao')
         data_emissao = request.form.get('data_emissao', hoje)
         data_vencimento = request.form.get('data_vencimento', hoje)
-        total_parcelas = request.form.get('total_parcelas', '1')
+        total_parcelas = int(request.form.get('total_parcelas', '1'))
         status = 'recebido' if tipo == 'receita' else 'aberto'
-        
+
         # INSERT SIMPLES
         conexao = sqlite3.connect(caminho_banco)
         cursor = conexao.cursor()
@@ -30,8 +33,7 @@ def initransacao():
         ''', (user_id, tipo, valor_total, descricao, data_emissao, data_vencimento, total_parcelas, status))
         conexao.commit()
         conexao.close()
-        
-        flash('Transação salva!', 'success')
+
         return redirect(url_for('financas.inifinancas'))
-    
+        
     return render_template('pasta_financas/crud/insert_transacao.html', hoje=hoje)
