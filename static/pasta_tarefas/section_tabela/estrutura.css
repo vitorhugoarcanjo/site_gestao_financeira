@@ -1,0 +1,20 @@
+.section_tabela {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.section_tabela_fundo {
+    display: flex;
+    background-color: yellow;
+    width: 80%;
+}
+
+.sub_section_fundo_tabela {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+
+
