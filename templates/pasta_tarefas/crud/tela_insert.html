@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INSERIR TAREFA</title>
+</head>
+
+<body>
+    <h1>tela on com flask</h1>
+
+    <form action="/tarefas" method="post">
+        <label for="descricao">DESCRIÇÃO:</label>
+        <input type="text" name="descricao">
+
+        <label for="status">STATUS:</label>
+        <select>
+            <option>PENDENTE</option>
+            <option>EM ANDAMENTO</option>
+            <option>CONCLUIDO</option>
+        </select>
+
+        <label for="data_inicio">DATA INICIO</label>
+        <input type="date" name="data_inicio">
+
+        <label for="data_final">DATA FINAL</label>
+        <input type="date" name="data_final">
+
+        <button type="submit">SALVAR</button>
+        <button type="reset">LIMPAR</button>
+    </form>
+</body>
+</html>
