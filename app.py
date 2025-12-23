@@ -70,7 +70,7 @@ app.register_blueprint(bp_config, url_prefix="/config")
 
 # TAREFAS
 app.register_blueprint(bp_tela_tarefas, url_prefix="/tarefas")
-app.register_blueprint(bp_insert_tarefas, url_prefix="/insert")
+app.register_blueprint(bp_insert_tarefas, url_prefix="/insert_tarefas")
 
 @app.route('/')
 def appinicializar():

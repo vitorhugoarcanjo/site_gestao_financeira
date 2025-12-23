@@ -10,15 +10,15 @@
 <body>
     <h1>tela on com flask</h1>
 
-    <form action="/tarefas" method="post">
+    <form action="/insert_tarefas" method="post">
         <label for="descricao">DESCRIÇÃO:</label>
         <input type="text" name="descricao">
 
         <label for="status">STATUS:</label>
-        <select>
+        <select name="status">
             <option>PENDENTE</option>
             <option>EM ANDAMENTO</option>
-            <option>CONCLUIDO</option>
+            <option>CONCLUíDO</option>
         </select>
 
         <label for="data_inicio">DATA INICIO</label>

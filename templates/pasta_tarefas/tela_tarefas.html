@@ -70,7 +70,7 @@
         <div class="section_botoes_fundo">
             <div class="sub_section_botoes">
                 <div class="botoes_globais">
-                    <a href="{{ url_for('insert.iniinsert') }}" class="btn_novo">NOVO</a>
+                    <a href="{{ url_for('insert_tarefas.iniinsert') }}" class="btn_novo">NOVO</a>
                     <a href="{{ url_for('dashboard.inidashboard') }}" class="btn_dashboard">DASHBOARD</a>
                 </div>
             </div>
@@ -86,6 +86,30 @@
                 </div>
             </div>
         </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <td>ID:</td>
+                    <th>DESCRIÇÃO:</th>
+                    <th>STATUS:</th>
+                    <th>DATA DE INÍCIO:</th>
+                    <th>DATA FINAL:</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for tarefa in resultado_tarefas %}
+                <tr>
+                    <td>{{ tarefa.id }}</td>
+                    <td>{{ tarefa.descricao }}</td>
+                    <td>{{ tarefa.status }}</td>
+                    <td>{{ tarefa.data_inicio }}</td>
+                    <td>{{ tarefa.data_final }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </section>
 </main>
 </html>
