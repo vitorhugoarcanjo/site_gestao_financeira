@@ -8,13 +8,19 @@ bp_tela_tarefas = Blueprint('tarefas', __name__)
 
 @bp_tela_tarefas.route('/', methods=['GET', 'POST'])
 @login_required
-def initarefas():
+def ini_tarefas():
     with sqlite3.connect(caminho_banco) as conexao_banco:
         cursor = conexao_banco.cursor()
 
-        cursor.execute('SELECT id, descricao, status, data_inicio, data_final FROM tarefas WHERE user_id = ?', (session['user_id'],))
+        cursor.execute("""SELECT t.id, t.descricao, t.status, t.data_inicio, t.data_final, t.categoria_id, t.prioridade,
+                       c.nome as categoria_nome, c.cor as categoria_cor
+                    FROM tarefas t 
+                    LEFT JOIN categorias_tarefas c ON t.categoria_id = c.id   
+                    WHERE t.user_id = ?
+                    ORDER BY t.data_inicio
+                    """, (session['user_id'],))
         tarefas = cursor.fetchall()
-    return render_template('pasta_tarefas/tela_tarefas.html', user_nome=session.get('user_nome'), tarefas=tarefas)
+    return render_template('pasta_tarefas/tela_tarefas.html.jinja', user_nome=session.get('user_nome'), tarefas=tarefas)
 
 
 
@@ -29,7 +35,7 @@ def concluir_tarefa(tarefa_id):
         conexao.commit()
 
         flash('Tarefa concluída com sucesso!', 'success')
-        return redirect(url_for('tarefas.initarefas'))
+        return redirect(url_for('tarefas.ini_tarefas'))
 
 
 
@@ -46,4 +52,4 @@ def excluir_tarefa(tarefa_id):
         conexao.commit()
 
         flash('Tarefa excluída com sucesso!', 'success')
-        return redirect(url_for('tarefas.initarefas'))
+        return redirect(url_for('tarefas.ini_tarefas'))

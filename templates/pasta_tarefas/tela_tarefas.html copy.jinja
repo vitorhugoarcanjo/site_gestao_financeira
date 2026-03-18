@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_tarefas/import_css.css') }}">
+    <title>GESTÃO TAREFAS</title>
+</head>
+
+<main>
+    <!-- SECÃO DO CABEÇALHO -->
+    <section class="section_cabecalho">
+        <div class="sec_cab_container_fundo">
+            <div class="sec_cab_sub_container">
+
+                <div class="usuario_logado">
+                    <p>Usuário Logado: {{ user_nome }}</p>
+                </div>
+
+                <div class="menu">
+                    <div class="btn_voltar">
+                        <a href="{{ url_for('pos_login.iniposlogin') }}"><span>↩️</span>VOLTAR</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECÃO DA CONSULTA -->
+    <section class="section_consulta">
+        <div class="sec_con_container_fundo">
+            <div class="sec_con_sub_container">
+                <div class="titulo">
+                    <h3>CONSULTE SUA TAREFA</h3>
+                </div>
+
+                <div class="label_input">
+                    <div class="sub_label_input">
+                        <label>Descrição:</label>
+                        <input>
+                    </div>
+
+                    <div class="sub_label_input">
+                        <label>DATA INICIO:</label>
+                        <input type="date">
+                    </div>
+
+                    <div class="sub_label_input">
+                        <label>DATA FINAL:</label>
+                        <input type="date">
+                    </div>
+                </div>
+
+                <div class="botoes">
+                    <button type="submit" class="btn_consultar">CONSULTAR</button>
+                    <button type="reset" class="btn_limpar">LIMPAR</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE BOTÕES -->
+    <section class="section_botoes">
+        <div class="section_botoes_fundo">
+            <div class="sub_section_botoes">
+                <div class="botoes_globais">
+                    <a href="{{ url_for('insert_tarefas.ini_insert') }}" class="btn_novo">NOVO</a>
+                    <a href="{{ url_for('dashboard.inidashboard') }}" class="btn_dashboard">DASHBOARD</a>
+                    <a href="{{ url_for('categorias.listar_categorias') }}" class="btn_dashboard">CATEGORIAS</a> 
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE TABELA -->
+    <section class="section_tabela">
+        <div class="section_tabela_fundo">
+            <div class="tabela-container">
+                <div class="titulo">
+                    <h1>TAREFAS</h1>
+                </div>
+
+                <div class="section_dados_tabela">
+                    <table>
+
+                        <!-- NOME DAS COLUNAS -->
+                        <thead>
+                            <tr>
+                                <th>ID:</th>
+                                <th>DESCRIÇÃO:</th>
+                                <th>STATUS:</th>
+                                <th>DATA DE INÍCIO:</th>
+                                <th>DATA FINAL:</th>
+                                <th>CATEGORIA</th>
+                                <th>PRIORIDADE</th>
+                                <th>AÇÕES:</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% if tarefas %}
+                                {% for tarefa in tarefas %}
+                                <tr>
+                                    <!-- ID DA TAREFA-->
+                                    <td>{{ tarefa[0] }}</td>
+
+                                    <!-- DESCRICAO -->
+                                    <td>{{ tarefa[1] }}</td>
+
+                                    <!-- STATUS -->
+                                    <td>
+                                        {% if tarefa[2] == 'concluido' %}
+                                        <p>✅ CONCLÚIDO</p>
+                                        {% endif %}
+
+                                        {% if tarefa[2] == 'em andamento' %}
+                                        <p>⏳ EM ANDAMENTO</p>
+                                        {% endif %}
+
+                                        {% if tarefa[2] == 'pendente' %}
+                                        <p>🔴 PENDENTE</p>
+                                        {% endif %}
+                                    </td>
+                                    
+                                    <!-- DATA INICIO -->
+                                    <td>{{ tarefa[3] }}</td>
+
+                                    <!-- DATA FINAL -->
+                                    <td>{{ tarefa[4] }}</td>
+
+                                    <!-- CATEGORIA -->
+                                    <td>
+                                        {% if tarefa[7] %}
+                                        <span style="background-color: {{ tarefa[8] }}; padding: 4px 8px; border-radius: 4px; color: white; font-weight: bold;">{{ tarefa[7] }}</span>
+
+                                        {% else %}
+                                            <span class="sem-categoria">-</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <!-- PRIORIDADE -->
+                                    <td>
+                                        {% if tarefa[6] %}
+                                        <span>{{ tarefa[6] }}</span>
+                                        {% else %}
+                                        <span>-</span>
+                                        {% endif %}
+
+                                    </td>
+
+                                    
+
+                                    <!-- AÇÕES -->
+                                    <td>
+                                        {% if tarefa[2] != 'concluido' %}
+                                        <!-- CONCLUIR -->
+                                        <form method="post" action="{{ url_for('tarefas.concluir_tarefa', tarefa_id=tarefa[0]) }}">
+                                            <button type="submit" title="CONCLUIR?">🟢</button>
+                                        </form>
+
+
+                                        <!-- EDITAR -->
+                                        <form action="{{ url_for('editar_tarefa.iniedittarefa', tarefa_id=tarefa[0]) }}">
+                                            <button type="submit" title="EDITAR?">✏️</button>
+                                        </form>
+
+
+                                        <!-- EXCLUIR-->
+                                        <form method="post" action="{{ url_for('tarefas.excluir_tarefa', tarefa_id=tarefa[0]) }}">
+                                            <button type="submit" title="EXCLUIR?">❌</button>
+                                        </form>
+
+                                        {% else %}
+                                            <span title="Concluido">✅</span>
+                                        {% endif %}
+                                        
+                                    </td>
+
+                                </tr>
+                                {% endfor %}
+                        
+                            {% else %}
+                                <tr><td colspan="6" style="text-align:center;padding:40px;color:#666;">📝 Nenhuma tarefa encontrada! Crie a primeira.</td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</main>
+</html>

@@ -17,4 +17,4 @@ def iniposlogin():
 def logout():
     session.clear()
     flash('Você saiu do sistema', 'info')
-    return redirect(url_for('appinicializar'))
+    return redirect(url_for('ini_app'))

@@ -1,5 +1,7 @@
+""" LÓGICA DO LOGIN  - INICIO """
+import os
+import sqlite3
 from flask import Blueprint, render_template, redirect, request, flash, url_for, session
-import os, sqlite3
 
 
 # VALIDAÇÃO DE LOGIN
@@ -13,6 +15,7 @@ bp_login = Blueprint('login', __name__)
 
 @bp_login.route('/', methods=['GET', 'POST'])
 def validar_login():
+    """ INICIO DA VALIDAÇÃO """
     if request.method == 'POST':
         nome_ou_email = request.form.get('nome_ou_email')
         senha = request.form.get('senha')
@@ -28,11 +31,10 @@ def validar_login():
 
         # SE O CADASTRO FOR ENCONTRADO, VAI PARA A PRÓXIMA PÁGINA
         if resultado:
-            
-            # BUSCAR ID E NOME DO USUÁRIO
             conexao_banco = sqlite3.connect(caminho_banco)
             cursor = conexao_banco.cursor()
-            cursor.execute('SELECT id, nome FROM cadastre_se WHERE (nome = ? OR email = ?)', (nome_ou_email, nome_ou_email))
+            cursor.execute('SELECT id, nome FROM cadastre_se WHERE (nome = ? OR email = ?)',
+                           (nome_ou_email, nome_ou_email))
             usuario = cursor.fetchone()
             conexao_banco.close()
 

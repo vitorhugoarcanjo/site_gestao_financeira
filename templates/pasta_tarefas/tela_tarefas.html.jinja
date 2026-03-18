@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Bootstrap + Dark Mode -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Seu Dark Mode Global -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_login_e_cadastre_se/global.css') }}">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <title>Gestão de Tarefas</title>
+    
+    <style>
+        /* Dark Mode Ajustes Específicos */
+        body { 
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%) !important; 
+        }
+        .content-wrapper {
+            background: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .content-wrapper:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+        }
+        .table-light { background: rgba(255, 255, 255, 0.1) !important; }
+        .text-muted { color: #94a3b8 !important; }
+    </style>
+</head>
+<body class="min-vh-100 py-5">
+    <div class="container-fluid px-lg-4 px-md-3">
+        
+        <!-- HEADER DARK -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="content-wrapper p-4 p-lg-5 rounded-4">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <div>
+                            <h2 class="fw-bold text-white mb-2 fs-1 fs-md-2">📝 Olá, {{ user_nome }}!</h2>
+                            <p class="lead text-white-50 mb-0">Gerencie suas tarefas diárias</p>
+                        </div>
+                        <a href="{{ url_for('pos_login.iniposlogin') }}" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-arrow-left me-2"></i>Voltar
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTROS + BOTÕES (Layout 2 Colunas) -->
+        <div class="row g-4 mb-5">
+            <!-- COLUNA 1: FILTROS -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="content-wrapper p-4 rounded-3">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="fw-bold text-white mb-0">
+                            <i class="bi bi-funnel me-2"></i>Filtros
+                        </h5>
+                        <span class="badge bg-light text-dark fs-6">Avançado</span>
+                    </div>
+                    
+                    <form class="row g-3" action="{{ url_for('tarefas.ini_tarefas') }}" method="GET">
+                        <div class="col-lg-4 col-md-6">
+                            <label class="form-label fw-semibold text-white small">Descrição</label>
+                            <input class="form-control" name="descricao" placeholder="Filtrar tarefas..." value="{{ request.args.get('descricao', '') }}">
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6">
+                            <label class="form-label fw-semibold text-white small">Data Início</label>
+                            <input type="date" class="form-control" name="data_inicio" value="{{ request.args.get('data_inicio', '') }}">
+                        </div>
+                        
+                        <div class="col-lg-4 col-md-6">
+                            <label class="form-label fw-semibold text-white small">Data Final</label>
+                            <input type="date" class="form-control" name="data_final" value="{{ request.args.get('data_final', '') }}">
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="d-flex gap-2 justify-content-end">
+                                <button type="submit" class="btn btn-primary btn-lg px-4">
+                                    <i class="bi bi-search me-2"></i>Consultar
+                                </button>
+                                <button type="reset" class="btn btn-outline-light btn-lg px-4">🗑️ Limpar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- COLUNA 2: AÇÕES -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="content-wrapper p-4 h-100 d-flex flex-column justify-content-between rounded-3">
+                    <div>
+                        <h5 class="fw-bold text-white mb-4 border-bottom pb-3">
+                            <i class="bi bi-gear me-2"></i>Ações Rápidas
+                        </h5>
+                        
+                        <div class="d-grid gap-3">
+                            <a href="{{ url_for('insert_tarefas.ini_insert') }}" class="btn btn-success btn-lg">
+                                <i class="bi bi-plus-circle me-2"></i>Nova Tarefa
+                            </a>
+                            <a href="{{ url_for('dashboard.inidashboard') }}" class="btn btn-info btn-lg">
+                                <i class="bi bi-graph-up me-2"></i>Dashboard
+                            </a>
+                            <a href="{{ url_for('categorias.listar_categorias') }}" class="btn btn-warning btn-lg">
+                                <i class="bi bi-tags me-2"></i>Categorias
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABELA TAREFAS (Dark Table) -->
+        <div class="row">
+            <div class="col-12">
+                <div class="content-wrapper rounded-4 overflow-hidden">
+                    <div class="p-4 border-bottom" style="background: rgba(255,255,255,0.05);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="fw-bold text-white mb-0">
+                                <i class="bi bi-list-task me-2"></i>Lista de Tarefas
+                                <span class="badge bg-primary ms-2">{{ tarefas|length }} Total</span>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-dark table-hover mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th class="border-0"><small>ID</small></th>
+                                        <th class="border-0"><small>Descrição</small></th>
+                                        <th class="border-0"><small>Status</small></th>
+                                        <th class="border-0"><small>Início</small></th>
+                                        <th class="border-0"><small>Fim</small></th>
+                                        <th class="border-0"><small>Categoria</small></th>
+                                        <th class="border-0"><small>Prioridade</small></th>
+                                        <th class="border-0"><small>Ações</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if tarefas %}
+                                        {% for tarefa in tarefas %}
+                                        <tr class="align-middle">
+                                            <td class="fw-semibold text-white-50">{{ tarefa[0] }}</td>
+                                            <td class="text-white">{{ tarefa[1] }}</td>
+                                            <td>
+                                                {% if tarefa[2] == 'concluido' %}
+                                                    <span class="badge bg-success">✅ Concluída</span>
+                                                {% elif tarefa[2] == 'em andamento' %}
+                                                    <span class="badge bg-warning text-dark">⏳ Andamento</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">⏰ Pendente</span>
+                                                {% endif %}
+                                            </td>
+                                            <td><span class="text-white-50">{{ tarefa[3] or '-' }}</span></td>
+                                            <td><span class="text-white-50">{{ tarefa[4] or '-' }}</span></td>
+                                            <td>
+                                                {% if tarefa[7] %}
+                                                    <span class="badge fw-semibold" style="background-color: {{ tarefa[8] }}; color: white;">
+                                                        {{ tarefa[7] }}
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">-</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if tarefa[6] %}
+                                                    {% set prio_class = 'bg-danger' if tarefa[6] == 'alta' else 'bg-warning text-dark' if tarefa[6] == 'media' else 'bg-success' %}
+                                                    <span class="badge {{ prio_class }} fw-semibold">{{ tarefa[6]|title }}</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">-</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if tarefa[2] != 'concluido' %}
+                                                    <div class="btn-group" role="group">
+                                                        <form method="post" action="{{ url_for('tarefas.concluir_tarefa', tarefa_id=tarefa[0]) }}" style="display:inline;">
+                                                            <button class="btn btn-success btn-sm" title="Concluir">
+                                                                <i class="bi bi-check-lg"></i>
+                                                            </button>
+                                                        </form>
+                                                        <a href="{{ url_for('editar_tarefa.iniedittarefa', tarefa_id=tarefa[0]) }}" class="btn btn-primary btn-sm" title="Editar">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </a>
+                                                        <form method="post" action="{{ url_for('tarefas.excluir_tarefa', tarefa_id=tarefa[0]) }}" style="display:inline;" onsubmit="return confirm('Confirmar exclusão?')">
+                                                            <button class="btn btn-danger btn-sm" title="Excluir">
+                                                                <i class="bi bi-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                {% else %}
+                                                    <span class="badge bg-success fs-6">✅ Finalizada</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td colspan="8" class="text-center py-5">
+                                                <div class="text-center text-white-50 py-5">
+                                                    <i class="bi bi-calendar-check display-1 mb-4 opacity-50"></i>
+                                                    <h4 class="fw-bold mb-3">Nenhuma tarefa cadastrada</h4>
+                                                    <p class="lead mb-4">Comece criando sua primeira tarefa</p>
+                                                    <a href="{{ url_for('insert_tarefas.ini_insert') }}" class="btn btn-success btn-lg px-5">
+                                                        <i class="bi bi-plus-circle me-2"></i>Nova Tarefa
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

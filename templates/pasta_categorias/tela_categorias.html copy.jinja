@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATEGORIAS</title>
+    <style>
+    .cor-preview { 
+        width: 30px; 
+        height: 30px; 
+        border-radius: 4px; 
+        border: 2px solid #333;
+        display: inline-block;
+    }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+    th { background-color: #f2f2f2; font-weight: bold; }
+</style>
+</head>
+
+<body>
+    <h1>CATEGORIAS</h1>
+    <a href="{{ url_for('categorias.insert_categorias_global') }}">➕ NOVA CATEGORIA</a>
+    <a href="{{ url_for('tarefas.ini_tarefas') }}">VOLTAR</a>
+
+    <!-- BLOCO 1 - CATEGORIA TAREFAS -->
+    {% if categoria_tarefas %}
+    <table>
+        <thead>
+            <tr>
+                <th>NOME:</th>
+                <th>COR:</th>
+                <th>AÇÕES:</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in categoria_tarefas %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td><div class="cor-preview" style="background-color: {{ row[1] }};"></div></td>
+                <td>AJUSTE POSTERIOR</td>
+            </tr>
+        </tbody>
+            {% endfor %}
+    </table>
+    {% endif %}
+
+    <!-- BLOCO 2 - CATEGORIA FINANÇAS -->
+    {% if categoria_financas %}
+
+    {% endif %}
+
+
+    {% if not categoria_tarefas and not categoria_financas %}
+    <p>Nenhuma categoria criada.</p>
+    <a href="{{ url_for('categorias.insert_categorias_global') }}">NOVO</a>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATEGORIAS</title>
+</head>
+<body>
+    <form method="post" action="{{ url_for('categorias.insert_categorias_global') }}">
+        <label for="nome">NOME:</label>
+        <input type="text" name="nome" value="{{ nome }}">
+
+        <label for="cor">COR:</label>
+        <input type="color" name="cor" value="{{ cor }}">
+
+        <label>CATEGORIA:</label>
+        <select name="modulo">
+            <option value=""></option>
+            <option value="tarefas">TAREFA</option>
+            <option value="financas">FINANÇA</option>
+        </select>
+
+        <button type="submit">SALVAR</button>
+        <a href="{{ url_for('categorias.listar_categorias') }}">VOLTAR</a>
+    </form>
+
+    {% if msg %}
+    <p>{{ msg }}</p>
+    {% endif %}
+
+</body>
+</html>

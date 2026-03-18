@@ -3,65 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_financas/crud/pasta_insert/import_css.css') }}">
-
+    
+    <!-- Bootstrap + Dark Mode -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Seu Dark Mode Global -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='pasta_login_e_cadastre_se/global.css') }}">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <title>Nova Transação</title>
+    
+    <style>
+        /* Form Insert Dark Mode */
+        .form-insert-card {
+            background: rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .form-insert-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        .form-label { 
+            color: #f8fafc !important; 
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .btn-custom {
+            border-radius: 12px;
+            font-weight: 600;
+            padding: 12px 24px;
+            transition: all 0.3s ease;
+        }
+    </style>
 </head>
-
-<body>
-    <section class="container_insert">
-        <form action="/nova_transacao" method="post">
-            <div class="h1_transacao">
-                <h1>NOVA TRANSAÇÃO</h1>
-            </div>
-
-            <div class="sub_container_insert">
-                <select name="tipo" required>
-                    <option value="receita">📈 Receita</option>
-                    <option value="despesa">📉 Despesa</option>
-                </select>
-
-                <div class="container_campos_insert">
-                    <label for="valor_total">VALOR:</label>
-                    <input type="number" name="valor_total" step="0.01" placeholder="R$ 0,00" required>
-                </div>
+<body class="min-vh-100 py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-8 col-lg-10">
                 
-                <div class="container_campos_insert">
-                    <label for="descricao">DESCRIÇÃO:</label>
-                    <input type="text" name="descricao" placeholder="Descrição" required>
-                </div>
+                <!-- FORM PRINCIPAL -->
+                <div class="form-insert-card shadow-xl rounded-4 p-4 p-lg-5 mb-5">
+                    <div class="text-center mb-5">
+                        <h1 class="display-4 fw-bold text-white mb-3">
+                            <i class="bi bi-plus-circle-fill text-success me-3"></i>
+                            NOVA TRANSAÇÃO
+                        </h1>
+                        <p class="lead text-white-50 mb-0">Crie receitas ou despesas rapidamente</p>
+                    </div>
 
-                <div class="container_campos_insert">
-                    <label for="total_parcelas">QUANTAS PARCELAS:</label>
-                    <input type="number" name="total_parcelas">
-                </div>
+                    <form action="/nova_transacao" method="post">
+                        <div class="row g-4">
+                            <!-- TIPO -->
+                            <div class="col-12">
+                                <label class="form-label">Tipo de Transação</label>
+                                <select name="tipo" class="form-select form-select-lg" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="receita" class="text-success">
+                                        <i class="bi bi-graph-up-arrow"></i> 📈 Receita/Entrada
+                                    </option>
+                                    <option value="despesa" class="text-danger">
+                                        <i class="bi bi-graph-down-arrow"></i> 📉 Despesa/Saída
+                                    </option>
+                                </select>
+                            </div>
 
-                <div class="container_campos_insert">
-                    <label for="data_emissao">DATA EMISSÃO:</label>
-                    <input type="date" name="data_emissao" value="{{ hoje }}" required>
-                </div>
-                
-                <div class="container_campos_insert">
-                    <label for="data_vencimento">DATA VENCIMENTO:</label>
-                    <input type="date" name="data_vencimento" value="{{ hoje }}">
+                            <!-- VALOR -->
+                            <div class="col-md-6">
+                                <label class="form-label">Valor Total <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-success text-white">
+                                        <i class="bi bi-currency-dollar"></i>
+                                    </span>
+                                    <input type="number" name="valor_total" step="0.01" 
+                                           class="form-control form-control-lg" 
+                                           placeholder="0,00" required>
+                                </div>
+                            </div>
+
+                            <!-- DESCRIÇÃO -->
+                            <div class="col-md-6">
+                                <label class="form-label">Descrição <span class="text-danger">*</span></label>
+                                <input type="text" name="descricao" 
+                                       class="form-control form-control-lg" 
+                                       placeholder="Ex: Salário, Aluguel, Supermercado..." required>
+                            </div>
+
+                            <!-- PARCELAS -->
+                            <div class="col-md-6">
+                                <label class="form-label">Parcelas (Opcional)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">
+                                        <i class="bi bi-calendar3"></i>
+                                    </span>
+                                    <input type="number" name="total_parcelas" min="1" max="60"
+                                           class="form-control form-control-lg" placeholder="1">
+                                </div>
+                            </div>
+
+                            <!-- DATA EMISSÃO -->
+                            <div class="col-md-6">
+                                <label class="form-label">Data Emissão <span class="text-danger">*</span></label>
+                                <input type="date" name="data_emissao" value="{{ hoje }}" 
+                                       class="form-control form-control-lg" required>
+                            </div>
+
+                            <!-- DATA VENCIMENTO -->
+                            <div class="col-12">
+                                <label class="form-label">Data Vencimento</label>
+                                <input type="date" name="data_vencimento" value="{{ hoje }}"
+                                       class="form-control form-control-lg">
+                            </div>
+                        </div>
+
+                        <!-- BOTÕES -->
+                        <div class="d-grid d-md-flex gap-3 justify-content-center mt-5 pt-4 border-top" 
+                             style="border-image: linear-gradient(90deg, rgba(255,255,255,0.2) 0%, transparent 50%) 1;">
+                            <button type="submit" class="btn btn-success btn-lg btn-custom shadow-lg flex-fill">
+                                <i class="bi bi-save me-2"></i>💾 SALVAR TRANSAÇÃO
+                            </button>
+                            <button type="reset" class="btn btn-outline-light btn-lg btn-custom shadow-lg flex-fill">
+                                <i class="bi bi-arrow-repeat me-2"></i>🧹 LIMPAR
+                            </button>
+                            <a href="{{ url_for('financas.inifinancas') }}" 
+                               class="btn btn-outline-warning btn-lg btn-custom shadow-lg">
+                                <i class="bi bi-arrow-left me-2"></i>⬅️ VOLTAR
+                            </a>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <div class="buttons">
-                <button type="submit" class="btn_salvar">💾 SALVAR</button>
-                <button type="reset" class="btn_limpar">🧹 LIMPAR</button>
-                <a href="{{ url_for('financas.inifinancas') }}" class="btn_voltar">⬅️ VOLTAR</a>
-            </div>
-
-        </form>
-    </section>
-
-    <section class="container_parcelas">
-        <div class="sub_container_parcelas">
-            <h1>CONTAINER - GERAÇÃO DAS PARCELAS (em construção)</h1>
         </div>
-    </section>
+    </div>
 
+    <!-- SEÇÃO PARCELAS (Em Construção) -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="text-center p-5 bg-warning bg-opacity-10 border border-warning border-opacity-25 rounded-4">
+                    <div class="display-5 text-warning mb-4">🔄</div>
+                    <h3 class="text-white mb-3">Geração de Parcelas</h3>
+                    <p class="lead text-white-50 mb-4">Funcionalidade em desenvolvimento</p>
+                    <div class="progress mx-auto" style="width: 300px;">
+                        <div class="progress-bar bg-warning" style="width: 40%"></div>
+                    </div>
+                    <small class="text-white-50 mt-3 d-block">Em breve: Divisão automática de parcelas</small>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

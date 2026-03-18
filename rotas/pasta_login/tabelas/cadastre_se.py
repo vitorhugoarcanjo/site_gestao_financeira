@@ -1,11 +1,4 @@
-import sqlite3, os
-
-caminho_banco = os.path.join(os.getcwd(), 'instance', 'banco_de_dados.db')
-
-def tabela_cadastre_se():
-    conexao_banco = sqlite3.connect(caminho_banco)
-    cursor = conexao_banco.cursor()
-
+def tabela_cadastre_se(cursor):
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS cadastre_se(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -18,6 +11,3 @@ def tabela_cadastre_se():
                    
     )
 """)
-    
-    conexao_banco.commit()
-    conexao_banco.close()
