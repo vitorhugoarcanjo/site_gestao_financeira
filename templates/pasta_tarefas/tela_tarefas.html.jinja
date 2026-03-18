@@ -132,7 +132,7 @@
                             <table class="table table-dark table-hover mb-0">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th class="border-0"><small>ID</small></th>
+                                        <th class="border-0"><small>Sequência</small></th>
                                         <th class="border-0"><small>Descrição</small></th>
                                         <th class="border-0"><small>Status</small></th>
                                         <th class="border-0"><small>Início</small></th>
@@ -179,15 +179,15 @@
                                             <td>
                                                 {% if tarefa[2] != 'concluido' %}
                                                     <div class="btn-group" role="group">
-                                                        <form method="post" action="{{ url_for('tarefas.concluir_tarefa', tarefa_id=tarefa[0]) }}" style="display:inline;">
+                                                        <form method="post" action="{{ url_for('tarefas.concluir_tarefa', tarefa_seq=tarefa[0]) }}" style="display:inline;">
                                                             <button class="btn btn-success btn-sm" title="Concluir">
                                                                 <i class="bi bi-check-lg"></i>
                                                             </button>
                                                         </form>
-                                                        <a href="{{ url_for('editar_tarefa.iniedittarefa', tarefa_id=tarefa[0]) }}" class="btn btn-primary btn-sm" title="Editar">
+                                                        <a href="{{ url_for('editar_tarefa.iniedittarefa', tarefa_seq=tarefa[0]) }}" class="btn btn-primary btn-sm" title="Editar">
                                                             <i class="bi bi-pencil"></i>
                                                         </a>
-                                                        <form method="post" action="{{ url_for('tarefas.excluir_tarefa', tarefa_id=tarefa[0]) }}" style="display:inline;" onsubmit="return confirm('Confirmar exclusão?')">
+                                                        <form method="post" action="{{ url_for('tarefas.excluir_tarefa', tarefa_seq=tarefa[0]) }}" style="display:inline;" onsubmit="return confirm('Confirmar exclusão?')">
                                                             <button class="btn btn-danger btn-sm" title="Excluir">
                                                                 <i class="bi bi-trash"></i>
                                                             </button>

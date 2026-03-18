@@ -29,3 +29,22 @@ def criar_todas_tabelas():
     print('Tabela criadas com sucesso!')
     conexao.commit()
     conexao.close()
+
+
+def organizar_tarefa_sequencia():
+    with sqlite3.connect(caminho_banco) as conn:
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT DISTINCT user_id FROM tarefas ORDER BY user_id")
+        users = cursor.fetchall()
+        
+        for user_row in users:
+            user_id = user_row[0]
+            cursor.execute("SELECT id FROM tarefas WHERE user_id = ? ORDER BY created_at ASC", (user_id,))
+            tarefas_user = cursor.fetchall()
+            
+            for seq, tarefa_id in enumerate(tarefas_user, 1):
+                cursor.execute("UPDATE tarefas SET tarefa_sequencia = ? WHERE id = ?", (seq, tarefa_id[0]))
+        
+        conn.commit()
+        print("✅ tarefa_sequencia preenchida!")

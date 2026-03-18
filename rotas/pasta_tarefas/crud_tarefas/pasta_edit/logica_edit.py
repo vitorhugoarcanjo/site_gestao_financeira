@@ -8,9 +8,9 @@ caminho_banco = os.path.join(os.getcwd(), 'instance', 'banco_de_dados.db')
 bp_tela_edit = Blueprint('editar_tarefa', __name__)
 
 
-@bp_tela_edit.route('/editar_tarefa/<int:tarefa_id>', methods=['GET', 'POST'])
+@bp_tela_edit.route('/editar_tarefa/<int:tarefa_seq>', methods=['GET', 'POST'])
 @login_required
-def iniedittarefa(tarefa_id):
+def iniedittarefa(tarefa_seq):
     user_id = session['user_id']
 
     conexao = sqlite3.connect(caminho_banco)
@@ -19,7 +19,7 @@ def iniedittarefa(tarefa_id):
     cursor.execute("""SELECT t.descricao, t.status, t.data_inicio, t.data_final, t.categoria_id, t.prioridade, c.nome as categoria_nome, c.cor as categoria_cor
                    FROM tarefas t
                    LEFT JOIN categorias_tarefas c ON t.categoria_id = c.id
-                   WHERE t.id = ? AND t.user_id = ?""", (tarefa_id, user_id))
+                   WHERE t.tarefa_sequencia = ? AND t.user_id = ?""", (tarefa_seq, user_id))
     tarefa = cursor.fetchone()
 
     cursor.execute("""SELECT id, nome, cor FROM categorias_tarefas WHERE user_id = ?""", (user_id,))
@@ -38,8 +38,8 @@ def iniedittarefa(tarefa_id):
         conexao = sqlite3.connect(caminho_banco)
         cursor = conexao.cursor()
 
-        cursor.execute('UPDATE tarefas SET descricao = ?, status = ?, data_inicio = ?, data_final = ?, categoria_id = ?, prioridade = ? WHERE id = ? AND user_id = ?', 
-                       (descricao, status, data_inicio, data_final, categoria_id, prioridade, tarefa_id, user_id))
+        cursor.execute('UPDATE tarefas SET descricao = ?, status = ?, data_inicio = ?, data_final = ?, categoria_id = ?, prioridade = ? WHERE tarefa_sequencia = ? AND user_id = ?', 
+                       (descricao, status, data_inicio, data_final, categoria_id, prioridade, tarefa_seq, user_id))
         
         conexao.commit()
         conexao.close()
@@ -51,7 +51,7 @@ def iniedittarefa(tarefa_id):
         return redirect(url_for('tarefas.ini_tarefas'))
 
     conexao.close()
-    return render_template('pasta_tarefas/crud_tarefas/tela_edit.html', tarefa=tarefa, tarefa_id=tarefa_id, todas_categorias=todas_categorias)
+    return render_template('pasta_tarefas/crud_tarefas/tela_edit.html', tarefa=tarefa, tarefa_seq=tarefa_seq, todas_categorias=todas_categorias)
 
 
 
