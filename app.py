@@ -11,7 +11,7 @@ from config.imports_rotas import logica_imports # IMPORTS DE BLUEPRINTS
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SERVER_NAME'] = 'vhorganiza.com.br'
+app.config['SERVER_NAME'] = 'vhorganiza.com.br:80'
 
 logica_imports(app) # IMPORTAÇÃO DOS BLUEPRINTS
 
