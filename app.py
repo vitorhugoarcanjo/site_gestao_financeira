@@ -1,8 +1,11 @@
 """ ARQUIVO PRINCIPAL """
 import os
 from datetime import timedelta # TEMPO DE LOGIN
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from dotenv import load_dotenv # CHAVE SECRETA
+
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 from config.database import criar_todas_tabelas # CRIAÇÃO DE TABELAS
 from config.imports_rotas import logica_imports # IMPORTS DE BLUEPRINTS
@@ -11,14 +14,20 @@ from config.imports_rotas import logica_imports # IMPORTS DE BLUEPRINTS
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SERVER_NAME'] = 'vhorganiza.com.br:80'
-
 logica_imports(app) # IMPORTAÇÃO DOS BLUEPRINTS
 
 app.secret_key = os.getenv('SECRET_KEY')
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
+
+@app.before_request
+def debug_request():
+    app.logger.debug(f"=== REQUISIÇÃO RECEBIDA ===")
+    app.logger.debug(f"URL: {request.url}")
+    app.logger.debug(f"Host: {request.host}")
+    app.logger.debug(f"Path: {request.path}")
+    app.logger.debug(f"Endpoint: {request.endpoint}")
 
 @app.route('/')
 def ini_app():
