@@ -7,6 +7,7 @@ def criar_tabela_tarefas(cursor):
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER,
         categoria_id INTEGER,
+        tarefa_sequencia INTEGER,
                        
         descricao TEXT NOT NULL,
         status TEXT DEFAULT 'pendente',
