@@ -1,6 +1,7 @@
 from flask import Blueprint, request, redirect, render_template, url_for, flash
 import os, sqlite3
 
+from .autenticador_email.email_utils import gerar_codigo, enviar_email_confirmacao, salvar_codigo_verificacao, verificar_codigo
 
 from .validacoes.criptografia_snh import criptografar_senha
 from .validacoes.validar_usuario import (
@@ -28,6 +29,7 @@ def tela_cadastre_se():
         # VALIDA TELEFONE
         telefone_limpo = validar_e_limpar_telefone(telefone)
         if not telefone_limpo:
+            flash('Telefone inválido!', 'danger')
             return redirect(url_for('cadastre_se.tela_cadastre_se'))
 
 
@@ -49,15 +51,82 @@ def tela_cadastre_se():
             conexao_banco = sqlite3.connect(caminho_banco)
             cursor = conexao_banco.cursor()
 
-            cursor.execute('INSERT INTO cadastre_se (nome, telefone, email, senha) VALUES (?, ?, ?, ?)', (nome, telefone_limpo, email, senha_criptografada))
+            cursor.execute('INSERT INTO cadastre_se (nome, telefone, email, senha) VALUES (?, ?, ?, ?)', 
+                          (nome, telefone_limpo, email, senha_criptografada))
             conexao_banco.commit()
-            flash('Cadastro realizado com sucesso!', 'success')
-            return redirect(url_for('login.validar_login'))
+            
+            # PEGA O ID DO USUÁRIO CRIADO
+            user_id = cursor.lastrowid
+            
+            # GERA CÓDIGO E ENVIA EMAIL
+            codigo = gerar_codigo()
+            sucesso, mensagem = enviar_email_confirmacao(email, codigo)
+            
+            if sucesso:
+                # SALVA CÓDIGO NO BANCO
+                salvar_codigo_verificacao(user_id, codigo)
+                flash('Cadastro realizado! Verifique seu email para confirmar.', 'success')
+                return redirect(url_for('cadastre_se.confirmar_email', user_id=user_id))
+            else:
+                # SE ERRO NO EMAIL, APAGA O USUÁRIO
+                cursor.execute('DELETE FROM cadastre_se WHERE id = ?', (user_id,))
+                conexao_banco.commit()
+                flash(f'Erro ao enviar email: {mensagem}', 'danger')
+                return redirect(url_for('cadastre_se.tela_cadastre_se'))
         
         except Exception as e:
-            flash('Erro ao cadastrar: ' + str(e), 'error')
+            flash('Erro ao cadastrar: ' + str(e), 'danger')
+            return redirect(url_for('cadastre_se.tela_cadastre_se'))
 
         finally:
             conexao_banco.close()
 
     return render_template('pasta_login/pasta_cadastre_se/tela_cadastre_se.html')
+
+
+@bp_cadastre_se.route('/confirmar-email/<int:user_id>')
+def confirmar_email(user_id):
+    """ Tela para digitar o código de confirmação """
+    return render_template('pasta_login/pasta_cadastre_se/confirmar_email.html.jinja', user_id=user_id)
+
+
+@bp_cadastre_se.route('/validar-codigo', methods=['POST'])
+def validar_codigo():
+    """ Valida o código digitado pelo usuário """
+    user_id = request.form.get('user_id')
+    codigo = request.form.get('codigo')
+    
+    sucesso, mensagem = verificar_codigo(user_id, codigo)
+    
+    if sucesso:
+        flash(mensagem, 'success')
+        return redirect(url_for('login.validar_login'))
+    else:
+        flash(mensagem, 'danger')
+        return redirect(url_for('cadastre_se.confirmar_email', user_id=user_id))
+
+
+@bp_cadastre_se.route('/reenviar-codigo/<int:user_id>')
+def reenviar_codigo(user_id):
+    """ Reenvia o código de confirmação """
+    with sqlite3.connect(caminho_banco) as conexao:
+        cursor = conexao.cursor()
+        cursor.execute("SELECT email FROM cadastre_se WHERE id = ?", (user_id,))
+        resultado = cursor.fetchone()
+        
+        if not resultado:
+            flash('Usuário não encontrado!', 'danger')
+            return redirect(url_for('cadastre_se.tela_cadastre_se'))
+        
+        email = resultado[0]
+    
+    codigo = gerar_codigo()
+    sucesso, mensagem = enviar_email_confirmacao(email, codigo)
+    
+    if sucesso:
+        salvar_codigo_verificacao(user_id, codigo)
+        flash('Novo código enviado com sucesso!', 'success')
+    else:
+        flash(mensagem, 'danger')
+    
+    return redirect(url_for('cadastre_se.confirmar_email', user_id=user_id))
