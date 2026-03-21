@@ -3,9 +3,6 @@ import sqlite3
 import os
 import sys
 
-# Adiciona o caminho do projeto ao sys.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from rotas.pasta_login.pasta_cadastre_se.autenticador_email.email_utils import gerar_codigo, enviar_email_confirmacao, salvar_codigo_verificacao
 
 caminho_banco = os.path.join(os.getcwd(), 'instance', 'banco_de_dados.db')
