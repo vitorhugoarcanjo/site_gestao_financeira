@@ -25,6 +25,11 @@ from rotas.pasta_tarefas.crud_tarefas.pasta_edit.logica_edit import bp_tela_edit
 # PASTA CATEGORIAS
 from rotas.pasta_categorias.logica_insert_categorias import bp_categorias
 
+# PASTA PAINEL DE LOGS
+from rotas.logs import importar_logs
+from rotas.middleware.logs_middleware import log_acesso_middleware
+
+
 # IMPORTS ROTAS
 def logica_imports(app):
     """ REGISTROS DO APP.BLUE... """
@@ -51,4 +56,9 @@ def logica_imports(app):
     app.register_blueprint(bp_insert_tarefas, url_prefix="/insert_tarefas")
     app.register_blueprint(bp_tela_edit, url_prefix="/editar_tarefa")
 
+    # CATEGORIAS
     app.register_blueprint(bp_categorias, url_prefix="/categorias")
+
+    # PAINEL LOGS
+    importar_logs(app)
+    log_acesso_middleware(app)

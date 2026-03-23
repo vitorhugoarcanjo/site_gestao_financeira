@@ -1,0 +1,93 @@
+{% extends "tela_base_telas_unificadas/base.html" %}
+
+{% block title %}Detalhe do Acesso #{{ acesso.id }}{% endblock %}
+
+{% block content %}
+<div class="container px-3 px-lg-4">
+    
+    <!-- CABEÇALHO -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="welcome-card p-4 rounded-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="fw-bold text-white mb-2">🔍 Detalhe do Acesso #{{ acesso.id }}</h1>
+                        <p class="text-white-50 mb-0">Informações completas do acesso</p>
+                    </div>
+                    <a href="{{ url_for('painel_acessos.logs_acessos') }}" class="btn btn-outline-light">
+                        <i class="bi bi-arrow-left"></i> Voltar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INFORMAÇÕES DO ACESSO -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card bg-dark bg-opacity-50">
+                <div class="card-header">
+                    <h5 class="text-white mb-0"><i class="bi bi-info-circle me-2"></i>Informações Gerais</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-dark table-borderless">
+                        <tr>
+                            <th style="width: 120px">ID:</th>
+                            <td>{{ acesso.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Data/Hora:</th>
+                            <td>{{ acesso.data_hora }}</td>
+                        </tr>
+                        <tr>
+                            <th>Usuário:</th>
+                            <td>{{ acesso.usuario_nome or 'Visitante' }} (ID: {{ acesso.usuario_id or 'N/A' }})</td>
+                        </tr>
+                        <tr>
+                            <th>IP:</th>
+                            <td><code>{{ acesso.ip or '-' }}</code></td>
+                        </tr>
+                        <tr>
+                            <th>Rota:</th>
+                            <td><code>{{ acesso.rota or '-' }}</code></td>
+                        </tr>
+                        <tr>
+                            <th>Método:</th>
+                            <td><span class="badge bg-info">{{ acesso.metodo or '-' }}</span></td>
+                        </tr>
+                        <tr>
+                            <th>Status:</th>
+                            <td>
+                                {% if acesso.status_code >= 200 and acesso.status_code < 300 %}
+                                    <span class="badge bg-success">{{ acesso.status_code }} - Sucesso</span>
+                                {% elif acesso.status_code >= 400 %}
+                                    <span class="badge bg-danger">{{ acesso.status_code }} - Erro</span>
+                                {% else %}
+                                    <span class="badge bg-warning">{{ acesso.status_code }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Tempo Resposta:</th>
+                            <td>{{ acesso.tempo_resposta }}ms</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card bg-dark bg-opacity-50">
+                <div class="card-header">
+                    <h5 class="text-white mb-0"><i class="bi bi-browser-chrome me-2"></i>User Agent</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-secondary bg-dark text-white-50 border-secondary">
+                        <small>{{ acesso.user_agent or 'Não informado' }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

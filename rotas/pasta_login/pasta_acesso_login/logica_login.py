@@ -27,7 +27,8 @@ def validar_login():
         # PRIMEIRO: VERIFICA SE O USUÁRIO EXISTE E SE O EMAIL FOI CONFIRMADO
         with sqlite3.connect(caminho_banco) as conexao_banco:
             cursor = conexao_banco.cursor()
-            cursor.execute('SELECT id, nome, email_verificado FROM cadastre_se WHERE (nome = ? OR email = ?)',
+            # ← ADICIONA is_master NA CONSULTA
+            cursor.execute('SELECT id, nome, email_verificado, is_master FROM cadastre_se WHERE (nome = ? OR email = ?)',
                            (nome_ou_email, nome_ou_email))
             usuario = cursor.fetchone()
             
@@ -46,8 +47,9 @@ def validar_login():
         if resultado:
             # SETAR NA SESSÃO
             session.permanent = True
-            session['user_id'] = usuario[0]
-            session['user_nome'] = usuario[1]
+            session['user_id'] = usuario[0]      # id
+            session['user_nome'] = usuario[1]    # nome
+            session['is_master'] = usuario[3] if len(usuario) > 3 else 0  # ← ADICIONA ESTA LINHA
 
             flash('Logado com sucesso!', 'success')
             return redirect(url_for('pos_login.iniposlogin'))

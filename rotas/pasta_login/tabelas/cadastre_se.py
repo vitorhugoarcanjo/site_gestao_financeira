@@ -17,8 +17,12 @@ def tabela_cadastre_se(cursor):
         email_verificado INTEGER DEFAULT 0,
         codigo_verificacao VARCHAR(6),
         codigo_expiracao DATETIME,
-        tentativas_verificacao INTEGER DEFAULT 0
-                    
+        tentativas_verificacao INTEGER DEFAULT 0,
+        
+        codigo_recuperacao_expiracao DATETIME,
+        codigo_recuperacao VARCHAR(6),
+        tentativas_recuperacao INTEGER DEFAULT 0
+        
         )
     """)
         print("✅ Tabela cadastre_se criada com sucesso!")
@@ -26,21 +30,10 @@ def tabela_cadastre_se(cursor):
     else:
         # MODELO DE NOVAS COLUNAS
         cursor.execute("PRAGMA table_info(cadastre_se)")
-        if not any(col[1] == 'codigo_recuperacao_expiracao' for col in cursor.fetchall()):
-            cursor.execute("ALTER TABLE cadastre_se ADD COLUMN codigo_recuperacao_expiracao DATETIME")
-            print("✅ Coluna codigo_recuperacao_expiracao Adicionado em cadastre_se")
+        if not any(col[1] == 'is_master' for col in cursor.fetchall()):
+            cursor.execute("ALTER TABLE cadastre_se ADD COLUMN is_master INTEGER DEFAULT 0")
+            print("✅ Coluna is_master Adicionado em cadastre_se")
 
-
-        cursor.execute("PRAGMA table_info(cadastre_se)")
-        if not any(col[1] == 'codigo_recuperacao' for col in cursor.fetchall()):
-            cursor.execute("ALTER TABLE cadastre_se ADD COLUMN codigo_recuperacao VARCHAR(6)")
-            print("✅ Coluna codigo_recuperacao Adicionado em cadastre_se")
-
-
-        cursor.execute("PRAGMA table_info(cadastre_se)")
-        if not any(col[1] == 'tentativas_recuperacao' for col in cursor.fetchall()):
-            cursor.execute("ALTER TABLE cadastre_se ADD COLUMN tentativas_recuperacao INTEGER DEFAULT 0")
-            print("✅ Coluna tentativas_recuperacao Adicionado em cadastre_se")
 
 
         print("Tabela tarefas já existe.")

@@ -1,0 +1,73 @@
+{% extends "tela_base_telas_unificadas/base.html" %}
+
+{% block title %}Logs do Sistema{% endblock %}
+
+{% block extra_css %}
+<style>
+/* CSS específico para logs se precisar */
+.logs-container {
+    padding: 20px;
+}
+
+.logs-header {
+    margin-bottom: 30px;
+}
+
+.nav-logs {
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+}
+
+.nav-logs a {
+    margin-right: 20px;
+    text-decoration: none;
+    color: #e0e0e0;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+.nav-logs a:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.nav-logs a.active {
+    background: rgba(13, 110, 253, 0.3);
+    color: #0d6efd;
+}
+
+body.light-mode .nav-logs a {
+    color: #495057;
+}
+
+body.light-mode .nav-logs a.active {
+    background: rgba(13, 110, 253, 0.1);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="logs-container">
+    <div class="logs-header">
+        <h1 class="fw-bold text-white">📊 Logs do Sistema</h1>
+        <p class="text-white-50">Monitoramento de erros, acessos e ações</p>
+    </div>
+    
+    <div class="nav-logs">
+        <a href="{{ url_for('painel_logs.index') }}" class="{% if request.endpoint == 'painel_logs.index' %}active{% endif %}">
+            📈 Dashboard
+        </a>
+        <a href="{{ url_for('painel_logs.erros') }}" class="{% if request.endpoint == 'painel_logs.erros' %}active{% endif %}">
+            ❌ Erros
+        </a>
+        <a href="{{ url_for('painel_logs.acessos') }}" class="{% if request.endpoint == 'painel_logs.acessos' %}active{% endif %}">
+            👥 Acessos
+        </a>
+        <a href="{{ url_for('painel_logs.acoes') }}" class="{% if request.endpoint == 'painel_logs.acoes' %}active{% endif %}">
+            📝 Ações
+        </a>
+    </div>
+    
+    {% block logs_content %}{% endblock %}
+</div>
+{% endblock %}

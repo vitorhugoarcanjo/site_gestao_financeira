@@ -223,7 +223,41 @@ body.light-mode .text-white-50 {
                 </div>
             </div>
         </div>
+
+        
+            <!-- LOGS DO SISTEMA - APARECE SÓ SE FOR MASTER -->
+            {% if session.get('is_master') == 1 %}
+            <div class="col-md-12">
+                <div class="card h-100 border-warning">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-journal-code fs-1 text-info me-3"></i>
+                            <h3 class="fw-bold text-white mb-0">📊 Logs do Sistema</h3>
+                        </div>
+                        <hr class="border-secondary">
+                        <p class="text-white-50 mb-3">
+                            Visualize logs de erros, acessos e ações do sistema. 
+                            Área restrita ao administrador.
+                        </p>
+                        <div class="d-flex gap-3">
+                            <a href="{{ url_for('painel_logs.dashboard_logs') }}" class="btn btn-info">
+                                <i class="bi bi-speedometer2"></i> Dashboard
+                            </a>
+                            <a href="{{ url_for('logs_erros.logs_erros') }}" class="btn btn-danger">
+                                <i class="bi bi-bug"></i> Logs de Erro
+                            </a>
+                            <a href="{{ url_for('painel_acessos.logs_acessos') }}" class="btn btn-success">
+                                <i class="bi bi-people"></i> Logs de Acesso
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
     </div>
+
+    
 
     <!-- INFORMAÇÕES DO SISTEMA -->
     <div class="row mt-4">

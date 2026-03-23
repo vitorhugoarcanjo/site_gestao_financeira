@@ -1,0 +1,138 @@
+{% extends "tela_base_telas_unificadas/base.html" %}
+
+{% block title %}Logs de Acesso{% endblock %}
+
+{% block content %}
+<div class="container px-3 px-lg-4">
+    
+    <!-- CABEÇALHO -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="welcome-card p-4 rounded-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1 class="fw-bold text-white mb-2">👥 Logs de Acesso</h1>
+                        <p class="text-white-50 mb-0">Histórico de acessos ao sistema</p>
+                    </div>
+                    <a href="{{ url_for('painel_logs.dashboard_logs') }}" class="btn btn-outline-light">
+                        <i class="bi bi-arrow-left"></i> Voltar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FILTRO -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <form method="GET" class="d-flex gap-2">
+                <input type="text" name="filtro" class="form-control bg-dark text-white border-secondary" 
+                       placeholder="Buscar por rota ou usuário..." value="{{ filtro }}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+                {% if filtro %}
+                <a href="{{ url_for('painel_acessos.logs_acessos') }}" class="btn btn-outline-light">
+                    <i class="bi bi-x"></i> Limpar
+                </a>
+                {% endif %}
+            </form>
+        </div>
+        <div class="col-md-6 text-end">
+            <span class="badge bg-primary fs-6">Total: {{ total }} acessos</span>
+        </div>
+    </div>
+
+    <!-- TABELA DE ACESSOS -->
+    <div class="card bg-dark bg-opacity-50">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px">ID</th>
+                            <th style="width: 160px">Data/Hora</th>
+                            <th>Usuário</th>
+                            <th>Rota</th>
+                            <th>Método</th>
+                            <th>Status</th>
+                            <th>Tempo</th>
+                            <th>IP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for acesso in acessos %}
+                        <tr onclick="window.location='{{ url_for('painel_acessos.detalhe_acesso', acesso_id=acesso.id) }}'">
+                            <td class="fw-bold text-white-50">{{ acesso.id }}</td>
+                            <td><span class="text-white-50">{{ acesso.data_hora }}</span></td>
+                            <td>{{ acesso.usuario_nome or 'Visitante' }}</td>
+                            <td><code>{{ acesso.rota or '-' }}</code></td>
+                            <td><span class="badge bg-secondary">{{ acesso.metodo or '-' }}</span></td>
+                            <td>
+                                {% if acesso.status_code >= 200 and acesso.status_code < 300 %}
+                                    <span class="badge bg-success">{{ acesso.status_code }}</span>
+                                {% elif acesso.status_code >= 400 %}
+                                    <span class="badge bg-danger">{{ acesso.status_code }}</span>
+                                {% else %}
+                                    <span class="badge bg-warning">{{ acesso.status_code }}</span>
+                                {% endif %}
+                            </td>
+                            <td><span class="text-white-50">{{ acesso.tempo_resposta }}ms</span></td>
+                            <td><span class="text-white-50">{{ acesso.ip or '-' }}</span></td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center py-5">
+                                <i class="bi bi-database fs-1"></i>
+                                <p class="mt-3 text-white-50">Nenhum acesso registrado</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGINAÇÃO -->
+    {% if total > limite %}
+    <nav class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if pagina > 1 %}
+            <li class="page-item">
+                <a class="page-link bg-dark text-white border-secondary" 
+                   href="{{ url_for('painel_acessos.logs_acessos', pagina=pagina-1, filtro=filtro) }}">
+                    Anterior
+                </a>
+            </li>
+            {% endif %}
+            
+            {% set total_paginas = (total / limite)|round(0, 'ceil')|int %}
+            {% for p in range(1, total_paginas + 1) %}
+                {% if p == pagina %}
+                <li class="page-item active">
+                    <span class="page-link bg-primary border-primary">{{ p }}</span>
+                </li>
+                {% elif p <= pagina + 2 and p >= pagina - 2 %}
+                <li class="page-item">
+                    <a class="page-link bg-dark text-white border-secondary" 
+                       href="{{ url_for('painel_acessos.logs_acessos', pagina=p, filtro=filtro) }}">
+                        {{ p }}
+                    </a>
+                </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if pagina < total_paginas %}
+            <li class="page-item">
+                <a class="page-link bg-dark text-white border-secondary" 
+                   href="{{ url_for('painel_acessos.logs_acessos', pagina=pagina+1, filtro=filtro) }}">
+                    Próxima
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}
