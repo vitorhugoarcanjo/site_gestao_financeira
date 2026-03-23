@@ -13,7 +13,7 @@ ROTAS_IGNORADAS = [
     '/painel_acessos',
 ]
 
-# PADRÕES DE ATAQUE PARA IGNORAR (não registrar no banco)
+# PADRÕES DE ATAQUE (para detectar e registrar separadamente)
 PADROES_ATAQUE = [
     '.env', '.git', '.svn', '.htaccess',
     'wp-', 'wordpress', 'wlwmanifest', 'xmlrpc',
@@ -57,12 +57,6 @@ def log_acesso_middleware(app):
             if request.path.startswith(rota):
                 return response
         
-        # IGNORA PADRÕES DE ATAQUE (não registra no banco)
-        caminho = request.path.lower()
-        for padrao in PADROES_ATAQUE:
-            if padrao in caminho:
-                return response
-        
         # Ignora redirecionamentos comuns
         if response.status_code == 302 and request.path == '/pos_login/':
             return response
@@ -73,8 +67,27 @@ def log_acesso_middleware(app):
         
         user_id = session.get('user_id')
         ip = get_client_ip()
+        caminho = request.path.lower()
         
-        # Registra o acesso
+        # VERIFICA SE É UM ATAQUE
+        ataque_detectado = None
+        for padrao in PADROES_ATAQUE:
+            if padrao in caminho:
+                ataque_detectado = padrao
+                break
+        
+        # Se for ataque, registra na tabela de ataques
+        if ataque_detectado:
+            LogService.registrar_ataque(
+                ip=ip,
+                rota=request.path[:255],
+                metodo=request.method,
+                user_agent=request.headers.get('User-Agent', '')[:500],
+                padrao=ataque_detectado
+            )
+            return response  # Não registra nos logs normais
+        
+        # Se não é ataque, registra normalmente
         LogService.registrar_acesso(
             user_id=user_id,
             ip=ip,

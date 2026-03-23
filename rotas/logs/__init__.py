@@ -7,6 +7,7 @@ bp_painel_logs = Blueprint('painel_logs', __name__)
 from rotas.logs.logs_erros.painel_erros import bp_painel_erros
 from rotas.logs.logs_acessos.painel_acessos import bp_painel_acessos
 from rotas.middleware.logs_middleware import log_acesso_middleware
+from rotas.logs.logs_ataques.painel_ataques import bp_painel_ataques  # ← NOVO
 
 def importar_logs(app):
     """Função para registrar todos os blueprints de logs"""
@@ -17,3 +18,4 @@ def importar_logs(app):
     app.register_blueprint(bp_painel_logs, url_prefix="/painel_logs")  # ← ADICIONA ESTE
     app.register_blueprint(bp_painel_erros)  # url_prefix já está no blueprint
     app.register_blueprint(bp_painel_acessos)  # url_prefix já está no blueprint
+    app.register_blueprint(bp_painel_ataques)  # ← NOVO

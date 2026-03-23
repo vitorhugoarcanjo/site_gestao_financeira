@@ -544,3 +544,61 @@ class LogService:
         except Exception as e:
             print(f"Erro ao obter dados do usuário: {e}")
             return {'nome': None, 'email': None, 'telefone': None}
+        
+    @staticmethod
+    def listar_ataques(limite=100):
+        """Lista tentativas de ataque"""
+        try:
+            conn = LogService.get_db_connection()
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT * FROM logs_ataques 
+                ORDER BY data_hora DESC 
+                LIMIT ?
+            """, (limite,))
+            
+            ataques = cursor.fetchall()
+            conn.close()
+            return ataques
+        except Exception as e:
+            print(f"Erro ao listar ataques: {e}")
+            return []
+
+    @staticmethod
+    def obter_ataque_por_id(ataque_id):
+        """Obtém detalhes de uma tentativa de ataque"""
+        try:
+            conn = LogService.get_db_connection()
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                SELECT * FROM logs_ataques 
+                WHERE id = ?
+            """, (ataque_id,))
+            
+            ataque = cursor.fetchone()
+            conn.close()
+            return ataque
+        except Exception as e:
+            print(f"Erro ao obter ataque: {e}")
+            return None
+
+    @staticmethod
+    def registrar_ataque(ip, rota, metodo, user_agent, padrao):
+        """Registra uma tentativa de ataque"""
+        try:
+            conn = LogService.get_db_connection()
+            cursor = conn.cursor()
+            
+            cursor.execute("""
+                INSERT INTO logs_ataques (ip, rota, metodo, user_agent, padrao_detectado)
+                VALUES (?, ?, ?, ?, ?)
+            """, (ip, rota, metodo, user_agent, padrao))
+            
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Erro ao registrar ataque: {e}")
+            return False
