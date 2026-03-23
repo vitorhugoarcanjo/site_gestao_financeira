@@ -3,6 +3,7 @@ import os
 from datetime import timedelta # TEMPO DE LOGIN
 from flask import Flask, render_template, request
 from dotenv import load_dotenv # CHAVE SECRETA
+from werkzeug.middleware.proxy_fix import ProxyFix # PEGAR IP DE QUEM ACESSOU
 
 import logging
 logging.basicConfig(level=logging.DEBUG)
@@ -15,24 +16,12 @@ load_dotenv()
 
 app = Flask(__name__)
 
+# Configura para confiar em proxies (Nginx)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+
 logica_imports(app) # IMPORTAÇÃO DOS BLUEPRINTS
 app.secret_key = os.getenv('SECRET_KEY') # CHAVE SECRETA
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30) # TEMPO COM LOGIN ABERTO
-
-# @app.before_request
-# def debug_request():
-#     app.logger.debug(f"=== REQUISIÇÃO RECEBIDA ===")
-#     app.logger.debug(f"URL: {request.url}")
-#     app.logger.debug(f"Host: {request.host}")
-#     app.logger.debug(f"Path: {request.path}")
-#     app.logger.debug(f"Endpoint: {request.endpoint}")
-
-# @app.after_request
-# def debug_response(response):
-#     app.logger.debug(f"=== RESPOSTA ENVIADA ===")
-#     app.logger.debug(f"Status: {response.status_code}")
-#     app.logger.debug(f"Location: {response.headers.get('Location', 'Nenhum')}")
-#     return response
 
 @app.route('/')
 def ini_app():

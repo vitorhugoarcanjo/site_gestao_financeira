@@ -5,13 +5,32 @@ from rotas.logs.logs_services.painel_services import LogService
 
 # Rotas que NÃO DEVEM ser logadas
 ROTAS_IGNORADAS = [
-    '/static',           # Arquivos estáticos
-    '/favicon.ico',      # Ícone do site
-    '/robots.txt',       # Robôs de busca
-    '/painel_logs',      # Logs de logs (evita loop)
-    '/logs_erros',       # Logs de erros
-    '/painel_acessos',   # Logs de acessos
+    '/static',
+    '/favicon.ico',
+    '/robots.txt',
+    '/painel_logs',
+    '/logs_erros',
+    '/painel_acessos',
 ]
+
+def get_client_ip():
+    """Tenta obter o IP real do cliente considerando proxies"""
+    # Tenta cabeçalhos comuns de proxy
+    headers = [
+        'X-Forwarded-For',
+        'X-Real-IP',
+        'CF-Connecting-IP',
+        'True-Client-IP'
+    ]
+    
+    for header in headers:
+        ip = request.headers.get(header)
+        if ip:
+            # Pega o primeiro IP se for uma lista (X-Forwarded-For)
+            return ip.split(',')[0].strip()
+    
+    # Fallback para remote_addr
+    return request.remote_addr
 
 def log_acesso_middleware(app):
     
@@ -35,16 +54,19 @@ def log_acesso_middleware(app):
         if response.status_code == 302 and request.path == '/pos_login/':
             return response
         
-        # Só loga se for GET ou POST (ignora HEAD, OPTIONS)
+        # Só loga se for GET ou POST
         if request.method not in ['GET', 'POST']:
             return response
         
         user_id = session.get('user_id')
         
+        # Pega o IP real do cliente
+        ip = get_client_ip()
+        
         # Registra o acesso
         LogService.registrar_acesso(
             user_id=user_id,
-            ip=request.remote_addr,
+            ip=ip,
             user_agent=request.headers.get('User-Agent', '')[:500],
             rota=request.path[:255],
             metodo=request.method,
