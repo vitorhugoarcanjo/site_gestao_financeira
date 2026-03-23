@@ -13,9 +13,18 @@ ROTAS_IGNORADAS = [
     '/painel_acessos',
 ]
 
+# PADRÕES DE ATAQUE PARA IGNORAR (não registrar no banco)
+PADROES_ATAQUE = [
+    '.env', '.git', '.svn', '.htaccess',
+    'wp-', 'wordpress', 'wlwmanifest', 'xmlrpc',
+    'joomla', 'drupal', 'magento',
+    'Dr0v', 'wp-includes', 'wp-content',
+    'config', 'settings', 'setup', 'backup',
+    'phpmyadmin', 'mysql', 'admin', 'login'
+]
+
 def get_client_ip():
     """Tenta obter o IP real do cliente considerando proxies"""
-    # Tenta cabeçalhos comuns de proxy
     headers = [
         'X-Forwarded-For',
         'X-Real-IP',
@@ -26,10 +35,8 @@ def get_client_ip():
     for header in headers:
         ip = request.headers.get(header)
         if ip:
-            # Pega o primeiro IP se for uma lista (X-Forwarded-For)
             return ip.split(',')[0].strip()
     
-    # Fallback para remote_addr
     return request.remote_addr
 
 def log_acesso_middleware(app):
@@ -50,6 +57,12 @@ def log_acesso_middleware(app):
             if request.path.startswith(rota):
                 return response
         
+        # IGNORA PADRÕES DE ATAQUE (não registra no banco)
+        caminho = request.path.lower()
+        for padrao in PADROES_ATAQUE:
+            if padrao in caminho:
+                return response
+        
         # Ignora redirecionamentos comuns
         if response.status_code == 302 and request.path == '/pos_login/':
             return response
@@ -59,8 +72,6 @@ def log_acesso_middleware(app):
             return response
         
         user_id = session.get('user_id')
-        
-        # Pega o IP real do cliente
         ip = get_client_ip()
         
         # Registra o acesso
