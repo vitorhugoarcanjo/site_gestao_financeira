@@ -28,13 +28,8 @@ def criar_tabela_tarefas(cursor):
     else:
         # MODELO - ESTRUTURA
         cursor.execute("PRAGMA table_info(tarefas)")
-        if not any(col[1] == 'categoria_id' for col in cursor.fetchall()):
-            cursor.execute("ALTER TABLE tarefas ADD COLUMN categoria_id INTEGER REFERENCES categorias_tarefas(id) ON DELETE SET NULL")
-            print("✅ Coluna categoria_id adicionada em tarefas!")
-        
-        cursor.execute("PRAGMA table_info(tarefas)")
-        if not any(col[1] == 'tarefa_sequencia' for col in cursor.fetchall()):
-            cursor.execute("ALTER TABLE tarefas ADD COLUMN tarefa_sequencia INTEGER")
-            print("✅ Coluna tarefa_sequencia adicionada!")
+        if not any(col[1] == 'data_finalizacao' for col in cursor.fetchall()):
+            cursor.execute("ALTER TABLE tarefas ADD COLUMN data_finalizacao DATE")
+            print("✅ Coluna data_finalizacao adicionada em tarefas!")
 
         print("ℹ️ Tabela tarefas já existe.")

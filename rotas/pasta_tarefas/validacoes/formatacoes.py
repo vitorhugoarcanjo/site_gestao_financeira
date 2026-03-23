@@ -16,8 +16,18 @@ def formatar_tarefas(tarefas):
     tarefas_formatadas = []
     for tarefa in tarefas:
         tarefa_lista = list(tarefa)
-        # data_inicio é o índice 3, data_fim é o índice 4
-        tarefa_lista[3] = formatar_data(tarefa_lista[3])  # data_inicio
-        tarefa_lista[4] = formatar_data(tarefa_lista[4])  # data_fim
+        
+        # data_inicio é o índice 3
+        if len(tarefa_lista) > 3:
+            tarefa_lista[3] = formatar_data(tarefa_lista[3])
+        
+        # data_fim (prazo) é o índice 4
+        if len(tarefa_lista) > 4:
+            tarefa_lista[4] = formatar_data(tarefa_lista[4])
+        
+        # data_finalizacao é o índice 5 (NOVO)
+        if len(tarefa_lista) > 5:
+            tarefa_lista[5] = formatar_data(tarefa_lista[5])
+        
         tarefas_formatadas.append(tarefa_lista)
     return tarefas_formatadas

@@ -35,7 +35,7 @@ def ini_tarefas():
     with sqlite3.connect(caminho_banco) as conexao_banco:
         cursor = conexao_banco.cursor()
 
-        query = """SELECT t.tarefa_sequencia, t.descricao, t.status, t.data_inicio, t.data_final, t.categoria_id, t.prioridade,
+        query = """SELECT t.tarefa_sequencia, t.descricao, t.status, t.data_inicio, t.data_final, t.data_finalizacao, t.categoria_id, t.prioridade,
                        c.nome as categoria_nome, c.cor as categoria_cor
                     FROM tarefas t 
                     LEFT JOIN categorias_tarefas c ON t.categoria_id = c.id   
@@ -120,13 +120,19 @@ def concluir_tarefa(tarefa_seq):
     with sqlite3.connect(caminho_banco) as conexao:
         cursor = conexao.cursor()
         
-        cursor.execute('UPDATE tarefas SET status = ? WHERE tarefa_sequencia = ? AND user_id = ?', ('concluido', tarefa_seq, session['user_id']))
+        # Usa horário local do servidor (Cuiabá GMT-4)
+        cursor.execute('''
+            UPDATE tarefas 
+            SET status = 'concluido', 
+                data_finalizacao = datetime('now', 'localtime'),
+                updated_at = datetime('now', 'localtime')
+            WHERE tarefa_sequencia = ? AND user_id = ?
+        ''', (tarefa_seq, session['user_id']))
+        
         conexao.commit()
 
         flash('Tarefa concluída com sucesso!', 'success')
         return redirect(url_for('tarefas.ini_tarefas'))
-
-
 
 
 # FUNÇÃO PARA EXCLUIR TAREFA

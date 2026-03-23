@@ -369,7 +369,7 @@ body.light-mode .container_list_taf{
 <div class="container-fluid px-0">
     <div class="row g-0">
 
-        <!-- BLOCO 2: FILTROS (16% da altura) -->
+        <!-- BLOCO 1: FILTROS (16% da altura) -->
         <div class="col col-filtros">
             <div class="h-100 p-1" style="overflow: visible;">
                 <form action="{{ url_for('tarefas.ini_tarefas') }}" method="POST" class="h-100">
@@ -475,7 +475,7 @@ body.light-mode .container_list_taf{
             </div>
         </div>
 
-        <!-- BLOCO 3: TAREFAS (80% da altura) - SÓ ESTA TEM SCROLL -->
+        <!-- BLOCO 2: TAREFAS (80% da altura) - SÓ ESTA TEM SCROLL -->
         <div class="col col-tarefas">
             <div class="p-1">
                 
@@ -509,6 +509,7 @@ body.light-mode .container_list_taf{
                                     <th class="border-0"><small>STATUS</small></th>
                                     <th class="border-0"><small>DATA_INICIO</small></th>
                                     <th class="border-0"><small>DATA_FINAL</small></th>
+                                    <th class="border-0"><small>DATA_FINALIZAÇÃO</small></th>
                                     <th class="border-0"><small>CATEGORIA</small></th>
                                     <th class="border-0"><small>PRIORIDADE</small></th>
                                     <th class="border-0"><small>AÇÕES</small></th>
@@ -532,18 +533,25 @@ body.light-mode .container_list_taf{
                                         <td><span class="text-white-50">{{ tarefa[3] or '-' }}</span></td>
                                         <td><span class="text-white-50">{{ tarefa[4] or '-' }}</span></td>
                                         <td>
-                                            {% if tarefa[7] %}
+                                            {% if tarefa[5] and tarefa[5] != '-' %}
+                                                <span class="badge bg-success">{{ tarefa[5] }}</span>
+                                            {% else %}
+                                                <span class="text-white-50">-</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if tarefa[8] %}
                                                 <span class="badge fw-semibold" style="background-color: {{ tarefa[8] }}; color: white;">
-                                                    {{ tarefa[7] }}
+                                                    {{ tarefa[8] }}
                                                 </span>
                                             {% else %}
                                                 <span class="badge bg-secondary">-</span>
                                             {% endif %}
                                         </td>
                                         <td>
-                                            {% if tarefa[6] %}
-                                                {% set prio_class = 'bg-danger' if tarefa[6] == 'alta' else 'bg-warning text-dark' if tarefa[6] == 'media' else 'bg-success' %}
-                                                <span class="badge {{ prio_class }} fw-semibold">{{ tarefa[6]|title }}</span>
+                                            {% if tarefa[7] %}
+                                                {% set prio_class = 'bg-danger' if tarefa[7] == 'alta' else 'bg-warning text-dark' if tarefa[7] == 'media' else 'bg-success' %}
+                                                <span class="badge {{ prio_class }} fw-semibold">{{ tarefa[7]|title }}</span>
                                             {% else %}
                                                 <span class="badge bg-secondary">-</span>
                                             {% endif %}
