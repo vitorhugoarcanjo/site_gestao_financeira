@@ -432,7 +432,7 @@ body.light-mode .container_list_taf{
                                 <option value="pendente" {% if status_filtro == 'pendente' %}selected{% endif %}>⏰ Pendente</option>
                                 <option value="em andamento" {% if status_filtro == 'em andamento' %}selected{% endif %}>⏳ Em Andamento</option>
                                 <option value="concluido" {% if status_filtro == 'concluido' %}selected{% endif %}>✅ Concluído</option>
-                                <option value="concluido_em_andamento" {% if status_filtro == 'concluido_em_andamento' %}selected{% endif %}>🔄 Concluído + Em Andamento</option>
+                                <option value="pendente_em_andamento" {% if status_filtro == 'pendente_em_andamento' %}selected{% endif %}>🔄 Pendente + Em Andamento</option>
                             </select>
                         </div>
 
@@ -637,8 +637,6 @@ body.light-mode .container_list_taf{
         </div>
     </div>
 </div>
-
-
 
 <script>
 function verDetalhes(tarefaId) {

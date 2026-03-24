@@ -73,8 +73,8 @@ def ini_tarefas():
             if status_filtro == 'vazio':
                 query += " AND (t.status is NULL OR t.status = '')"
 
-            elif status_filtro == 'concluido_em_andamento':
-                query += " AND (t.status = 'concluido' OR t.status = 'em andamento')"
+            elif status_filtro == 'pendente_em_andamento':
+                query += " AND (t.status = 'pendente' OR t.status = 'em andamento')"
 
             else:
                 query += " AND t.status = ?"
