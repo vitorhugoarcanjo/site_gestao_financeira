@@ -2,6 +2,8 @@ import os
 import sqlite3
 caminho_banco = os.path.join(os.getcwd(), 'instance', 'banco_de_dados.db')
 
+# CRIAR INDICES
+from .indices_automatico import criar_indices
 
 from rotas.pasta_login.tabelas.cadastre_se import tabela_cadastre_se # TABELA DE CADASTRO DE USUÁRIO
 
@@ -39,7 +41,8 @@ def criar_todas_tabelas():
     tabela_logs_resumo_mensal(cursor)
     tabela_ataque(cursor)
 
-
+    # CRIA ÍNDICES
+    criar_indices(cursor)
 
     print('Tabela criadas com sucesso!')
     conexao.commit()
