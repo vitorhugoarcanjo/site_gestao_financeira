@@ -24,6 +24,7 @@ from rotas.pasta_tarefas.crud_tarefas.pasta_edit.logica_edit import bp_tela_edit
 
 # PASTA CATEGORIAS
 from rotas.pasta_categorias.logica_insert_categorias import bp_categorias
+from rotas.pasta_categorias.crud.categorias_tarefas.crud_categorias_tarefas.edit_categorias import bp_edit_cat_tar
 
 # PASTA PAINEL DE LOGS
 from rotas.logs import importar_logs
@@ -58,6 +59,7 @@ def logica_imports(app):
 
     # CATEGORIAS
     app.register_blueprint(bp_categorias, url_prefix="/categorias")
+    app.register_blueprint(bp_edit_cat_tar, url_prefix="/edit_cat_tar")
 
     # PAINEL LOGS
     importar_logs(app)

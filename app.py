@@ -1,7 +1,7 @@
 """ ARQUIVO PRINCIPAL """
 import os
 from datetime import timedelta # TEMPO DE LOGIN
-from flask import Flask, render_template, request
+from flask import Flask, render_template
 from dotenv import load_dotenv # CHAVE SECRETA
 from werkzeug.middleware.proxy_fix import ProxyFix # PEGAR IP DE QUEM ACESSOU
 

@@ -10,7 +10,7 @@ def ini_categorias():
     cursor = conexao.cursor()
 
     # BLOCO 1 - CATEGORIA TAREFAS
-    cursor.execute('SELECT nome, cor FROM categorias_tarefas WHERE user_id = ?', (user_id,))
+    cursor.execute('SELECT id, nome, cor FROM categorias_tarefas WHERE user_id = ?', (user_id,))
     categoria_tarefas = cursor.fetchall()
 
     # BLOCO 2 - CATEGORIA FINANCAS

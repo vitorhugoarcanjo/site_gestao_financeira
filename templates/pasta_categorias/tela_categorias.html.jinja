@@ -54,6 +54,23 @@
             </div>
         </div>
 
+        <!-- FLASH MESSAGES (NOVO) -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="alert alert-{{ 'success' if category == 'success' else 'danger' if category == 'danger' else 'warning' }} alert-dismissible fade show" role="alert">
+                            <i class="bi bi-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' if category == 'danger' else 'info-circle' }} me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <!-- TABELA CATEGORIAS -->
         {% if categoria_tarefas %}
         <div class="row">
@@ -70,25 +87,30 @@
                                         <th>Nome</th>
                                         <th>Cor</th>
                                         <th>Ações</th>
-                                    </tr>
-                                </thead>
+                                    </thead>
                                 <tbody>
                                     {% for row in categoria_tarefas %}
                                     <tr>
-                                        <td class="fw-medium">{{ row[0] }}</td>
+                                        <td class="fw-medium">{{ row[1] }}</td>
                                         <td>
                                             <div class="color-preview" 
-                                                 style="background-color: {{ row[1] }};" 
-                                                 title="{{ row[1] }}"></div>
+                                                 style="background-color: {{ row[2] }};" 
+                                                 title="{{ row[2] }}"></div>
                                         </td>
                                         <td>
                                             <div class="btn-group btn-group-sm" role="group">
-                                                <button class="btn btn-outline-primary" title="Editar">
+                                                <a href="{{ url_for('edit_cat_tar.ini_edit_cat_tar', id=row[0]) }}" 
+                                                   class="btn btn-outline-primary" 
+                                                   title="Editar">
                                                     <i class="bi bi-pencil"></i>
-                                                </button>
-                                                <button class="btn btn-outline-danger" title="Excluir">
+                                                </a>
+
+                                                <a href="{{ url_for('categorias.excluir_categoria', id=row[0]) }}" 
+                                                   class="btn btn-outline-danger" 
+                                                   title="Excluir"
+                                                   onclick='return confirm("Tem certeza que deseja excluir a categoria {{ row[1] }}?")')">
                                                     <i class="bi bi-trash"></i>
-                                                </button>
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -121,5 +143,6 @@
 
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

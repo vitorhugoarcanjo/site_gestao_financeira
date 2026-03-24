@@ -6,10 +6,10 @@ caminho_banco = os.path.join(os.getcwd(), 'instance', 'banco_de_dados.db')
 from rotas.pasta_login.tabelas.cadastre_se import tabela_cadastre_se # TABELA DE CADASTRO DE USUÁRIO
 
 from rotas.pasta_financas.tabelas.tabelas_gerais import tabela_transacoes # TABELA TRANSAÇÕES E CATEGORIAS
-from rotas.pasta_categorias.categorias_financas.tabela.tabela_categoria_financas import tabela_categorias_financas # TABELA CATEGORIA FINANCAS
+from rotas.pasta_categorias.crud.categorias_financas.tabela.tabela_categoria_financas import tabela_categorias_financas # TABELA CATEGORIA FINANCAS
 
 from rotas.pasta_tarefas.tabelas.tabela_tarefas import criar_tabela_tarefas # TABELA TAREFAS
-from rotas.pasta_categorias.categorias_tarefas.tabela.tabela_categoria_tarefas import tabela_categorias_tarefas # TABELA CATEGORIA_TAREFAS
+from rotas.pasta_categorias.crud.categorias_tarefas.tabela.tabela_categoria_tarefas import tabela_categorias_tarefas # TABELA CATEGORIA_TAREFAS
 
 # TABELAS DOS LOGS
 from rotas.logs.logs_services.tabela_services import tabela_services
