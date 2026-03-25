@@ -249,6 +249,7 @@
 
 
 
+
 /* ============================================ */
 /* 3. TEMA CLARO - TABELA                      */
 /* ============================================ */
@@ -375,32 +376,46 @@ body.light-mode .container_list_taf{
                 <form action="{{ url_for('tarefas.ini_tarefas') }}" method="POST" class="h-100">
                     <div class="filtros-container">
                         
-                        <!-- BLOCO 1: DATA -->
-                        <div class="bloco-filtro">
-                            <div class="bloco-titulo">📅 DATA</div>
+                        <!-- BLOCO 1: DATA (COMPACTO) -->
+                        <div class="bloco-filtro" style="padding: 2px;">
+                            <div class="bloco-titulo" style="font-size: 0.7rem; margin-bottom: 2px;">📅 DATA</div>
                             
-                            <div class="grupo-botoes-linha">
-                                <button type="submit" name="tipo_filtro" value="ontem" class="btn btn-sm btn-outline-light btn-data">-1</button>
-                                <button type="submit" name="tipo_filtro" value="hoje" class="btn btn-sm btn-outline-success btn-data">HOJE</button>
-                                <button type="submit" name="tipo_filtro" value="amanha" class="btn btn-sm btn-outline-light btn-data">+1</button>
+                            <!-- Primeira linha: botões rápidos -->
+                            <div class="d-flex gap-1 mb-1">
+                                <button type="submit" name="tipo_filtro" value="ontem" class="btn btn-sm btn-outline-light flex-fill" style="font-size: 0.6rem; padding: 2px 0;">-1</button>
+                                <button type="submit" name="tipo_filtro" value="hoje" class="btn btn-sm btn-outline-success flex-fill" style="font-size: 0.6rem; padding: 2px 0;">HOJE</button>
+                                <button type="submit" name="tipo_filtro" value="amanha" class="btn btn-sm btn-outline-light flex-fill" style="font-size: 0.6rem; padding: 2px 0;">+1</button>
                             </div>
+                            
+                            <!-- Segunda linha: botões de mês -->
+                            <div class="d-flex gap-1 mb-1">
+                                <button type="submit" name="tipo_filtro" value="mes_passado" class="btn btn-sm btn-outline-light flex-fill" style="font-size: 0.6rem; padding: 2px 0;">-1m</button>
+                                <button type="submit" name="tipo_filtro" value="mes" class="btn btn-sm btn-outline-info flex-fill" style="font-size: 0.6rem; padding: 2px 0;">I/F</button>
+                                <button type="submit" name="tipo_filtro" value="mes_proximo" class="btn btn-sm btn-outline-light flex-fill" style="font-size: 0.6rem; padding: 2px 0;">+1m</button>
+                            </div>
+                            
+                            <!-- Terceira linha: inputs de data (lado a lado) -->
+                            <div class="d-flex gap-1">
+                                <div class="input-wrapper" style="flex: 1; padding: 0 2px;">
+                                    <span class="input-label" style="font-size: 0.6rem;">Início:</span>
+                                    <input type="date" name="data_inicio" class="form-control form-control-sm input-data" style="font-size: 0.7rem; padding: 2px;" value="{{ data_inicio or '' }}">
+                                </div>
+                                <div class="input-wrapper" style="flex: 1; padding: 0 2px;">
+                                    <span class="input-label" style="font-size: 0.6rem;">Fim:</span>
+                                    <input type="date" name="data_fim" class="form-control form-control-sm input-data" style="font-size: 0.7rem; padding: 2px;" value="{{ data_fim or '' }}">
+                                </div>
+                            </div>
+                            
+                            <!-- Opcional: tipo de data (compacto) -->
+                            <div class="mt-1">
+                                <select name="tipo_data" class="form-select form-select-sm" style="font-size: 0.6rem; padding: 2px 4px; background: rgba(0,0,0,0.3); color: white;">
+                                    <option value="inicio" {% if tipo_data == 'inicio' %}selected{% endif %}>📅 DATA INICIO</option>
+                                    <option value="final" {% if tipo_data == 'final' %}selected{% endif %}>⏰ DATA FINAL</option>
+                                    <option value="finalizacao" {% if tipo_data == 'finalizacao' %}selected{% endif %}>✅ DATA FINALIZAÇÃO</option>
+                                </select>
+                            </div>
+                            <input type="hidden" name="mostrar_inativas" value="{{ mostrar_inativas }}">
 
-                            <div class="grupo-botoes-linha">
-                                <button type="submit" name="tipo_filtro" value="mes_passado" class="btn btn-sm btn-outline-light btn-data">-1m</button>
-                                <button type="submit" name="tipo_filtro" value="mes" class="btn btn-sm btn-outline-info btn-data">I/F</button>
-                                <button type="submit" name="tipo_filtro" value="mes_proximo" class="btn btn-sm btn-outline-light btn-data">+1m</button>
-                            </div>
-                            
-                            <div class="grupo-inputs-data">
-                                <div class="input-wrapper">
-                                    <span class="input-label">Início:</span>
-                                    <input type="date" name="data_inicio" class="form-control form-control-sm input-data" value="{{ data_inicio or '' }}">
-                                </div>
-                                <div class="input-wrapper">
-                                    <span class="input-label">Fim/Mês:</span>
-                                    <input type="date" name="data_fim" class="form-control form-control-sm input-data" value="{{ data_fim or '' }}">
-                                </div>
-                            </div>
                         </div>
                         
                         <!-- BLOCO 2: CATEGORIAS -->
@@ -422,41 +437,68 @@ body.light-mode .container_list_taf{
                             </div>
                         </div>
 
-                        <!-- BLOCO 3: STATUS -->
-                        <div class="bloco-filtro">
-                            <div class="bloco-titulo">📊 STATUS</div>
+                        <!-- BLOCO 3: STATUS + PRIORIDADE + ATIVO (EM LINHA) -->
+                        <div class="bloco-filtro" style="flex: 1;">
+                            <div class="bloco-titulo">📊 OUTROS FILTROS </div>
                             
-                            <select name="status" class="status-select">
-                                <option value="" {% if status_filtro == '' %}selected{% endif %}>Todos</option>
-                                <option value="vazio" {% if status_filtro == 'vazio' %}selected{% endif %}>📋 Vazio (pendente validação)</option>
-                                <option value="pendente" {% if status_filtro == 'pendente' %}selected{% endif %}>⏰ Pendente</option>
-                                <option value="em andamento" {% if status_filtro == 'em andamento' %}selected{% endif %}>⏳ Em Andamento</option>
-                                <option value="concluido" {% if status_filtro == 'concluido' %}selected{% endif %}>✅ Concluído</option>
-                                <option value="pendente_em_andamento" {% if status_filtro == 'pendente_em_andamento' %}selected{% endif %}>🔄 Pendente + Em Andamento</option>
-                            </select>
+                            <!-- Primeira linha: Status + Prioridade -->
+                            <div class="d-flex gap-3 mb-0">
+                                <div style="flex: 1;">
+                                    <label class="small text-white-50">Status</label>
+                                    <select name="status" class="status-select">
+                                        <option value="" {% if status_filtro == '' %}selected{% endif %}>Todos</option>
+                                        <option value="vazio" {% if status_filtro == 'vazio' %}selected{% endif %}>📋 Vazio</option>
+                                        <option value="pendente" {% if status_filtro == 'pendente' %}selected{% endif %}>⏰ Pendente</option>
+                                        <option value="em andamento" {% if status_filtro == 'em andamento' %}selected{% endif %}>⏳ Andamento</option>
+                                        <option value="concluido" {% if status_filtro == 'concluido' %}selected{% endif %}>✅ Concluído</option>
+                                        <option value="pendente_em_andamento" {% if status_filtro == 'pendente_em_andamento' %}selected{% endif %}>🔄 Pend+Andam</option>
+                                    </select>
+                                </div>
+                                
+                                <div style="flex: 1;">
+                                    <label class="small text-white-50">Prioridade</label>
+                                    <select name="prioridade" class="prioridade-select">
+                                        <option value="" {% if prioridade_filtro == '' %}selected{% endif %}>Todos</option>
+                                        <option value="vazio" {% if prioridade_filtro == 'vazio' %}selected{% endif %}>📋 Vazio</option>
+                                        <option value="baixa" {% if prioridade_filtro == 'baixa' %}selected{% endif %}>🟢 Baixa</option>
+                                        <option value="media" {% if prioridade_filtro == 'media' %}selected{% endif %}>🟡 Média</option>
+                                        <option value="alta" {% if prioridade_filtro == 'alta' %}selected{% endif %}>🔴 Alta</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Segunda linha: Ativo/Inativo/Todas (horizontal) -->
+                            <div>
+                                <label class="small text-white-50 d-block">Tarefa:</label>
+                                <div class="d-flex gap-1 mt-1">
+                                    <a href="{{ url_for('tarefas.ini_tarefas', mostrar_inativas='0') }}" 
+                                    class="btn btn-sm flex-fill {% if mostrar_inativas == '0' %}btn-primary{% else %}btn-outline-light{% endif %}"
+                                    style="font-size: 0.65rem; padding: 4px 0;">
+                                        <i class="bi bi-check-circle"></i> Ativas
+                                    </a>
+                                    <a href="{{ url_for('tarefas.ini_tarefas', mostrar_inativas='1') }}" 
+                                    class="btn btn-sm flex-fill {% if mostrar_inativas == '1' %}btn-primary{% else %}btn-outline-light{% endif %}"
+                                    style="font-size: 0.65rem; padding: 4px 0;">
+                                        <i class="bi bi-archive"></i> Inativas
+                                    </a>
+                                    <a href="{{ url_for('tarefas.ini_tarefas', mostrar_inativas='2') }}" 
+                                    class="btn btn-sm flex-fill {% if mostrar_inativas == '2' %}btn-primary{% else %}btn-outline-light{% endif %}"
+                                    style="font-size: 0.65rem; padding: 4px 0;">
+                                        <i class="bi bi-list-ul"></i> Todas
+                                    </a>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- BLOCO 4: PRIORIDADE -->
-                        <div class="bloco-filtro">
-                            <div class="bloco-titulo">⚡ PRIORIDADE</div>
-                            
-                            <select name="prioridade" class="prioridade-select">
-                                <option value="" {% if prioridade_filtro == '' %}selected{% endif %}>Todos</option>
-                                <option value="vazio" {% if prioridade_filtro == 'vazio' %}selected{% endif %}>📋 Vazio (pendente validação)</option>
-                                <option value="baixa" {% if prioridade_filtro == 'baixa' %}selected{% endif %}>🟢 Baixa</option>
-                                <option value="media" {% if prioridade_filtro == 'media' %}selected{% endif %}>🟡 Média</option>
-                                <option value="alta" {% if prioridade_filtro == 'alta' %}selected{% endif %}>🔴 Alta</option>
-                            </select>
-                        </div>
 
-                        <!-- BLOCO 5: DESCRIÇÃO -->
+                        <!-- BLOCO 4: DESCRIÇÃO -->
                         <div class="bloco-filtro">
                             <div class="bloco-titulo">🔍 DESCRIÇÃO</div>
                             
                             <input type="text" name="descricao" class="form-control form-control-sm text-black" style="font-size: 0.7rem; padding: 3px 6px;" placeholder="buscar..." value="{{ descricao_filtro or '' }}" onkeypress="if(event.key === 'Enter'){ event.preventDefault(); this.form.querySelector('button[value=\'consultar\']').click(); }">
                         </div>
 
-                        <!-- BLOCO 6: AÇÕES RÁPIDAS -->
+                        <!-- BLOCO 5: AÇÕES RÁPIDAS -->
                         <div class="bloco-filtro">
                             <div class="bloco-titulo">⚙️ AÇÕES</div>
                             
@@ -469,6 +511,8 @@ body.light-mode .container_list_taf{
                                 </button>
                             </div>
                         </div>
+
+
                         
                     </div>
                 </form>
@@ -565,6 +609,18 @@ body.light-mode .container_list_taf{
                                                         title="Ver detalhes">
                                                     <i class="bi bi-eye"></i>
                                                 </button>
+
+                                                <!-- Botão Auditoria (Histórico) -->
+                                                <a href="{{ url_for('auditoria.historico_tarefa', 
+                                                            tarefa_seq=tarefa[0],
+                                                            mostrar_inativas=request.args.get('mostrar_inativas', '0'),
+                                                            data_inicio=request.args.get('data_inicio'),
+                                                            data_fim=request.args.get('data_fim'),
+                                                            tipo_data=request.args.get('tipo_data', 'inicio')) }}" 
+                                                class="btn btn-sm btn-secondary" 
+                                                title="Ver histórico de alterações">
+                                                    <i class="bi bi-clock-history"></i>
+                                                </a>
 
                                                 {% if tarefa[3] != 'concluido' %}
                                                     <form method="post" action="{{ url_for('tarefas.concluir_tarefa', tarefa_seq=tarefa[0]) }}" style="display:inline;">

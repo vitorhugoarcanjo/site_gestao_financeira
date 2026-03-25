@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, session, redirect, url_for, flash
 import os, sqlite3
 from datetime import date
 from rotas.middleware.autenticacao import login_required
+from rotas.auditoria_geral.services_auditoria import AuditoriaService
 
 # FILTROS
 from .crud_tarefas.pasta_filtros.tarefas_filtros import *
@@ -18,7 +19,7 @@ bp_tela_tarefas = Blueprint('tarefas', __name__)
 def ini_tarefas():
     # LÓGICA PARA O FILTRO DATA
     data_hoje = date.today()
-    data_inicio, data_fim = filtro_datas(data_hoje)
+    data_inicio, data_fim, tipo_data = filtro_datas(data_hoje)
 
     # FILTRO CATEGORIAS
     categorias_filtro, categorias_usuario = filtro_categorias(session['user_id'])
@@ -32,6 +33,22 @@ def ini_tarefas():
     # FILTRO DESCRICAO
     descricao_filtro = filtro_descricao()
 
+    # FILTRO ATIVO/INATIVO - CORRIGIDO
+    # 1. Tenta pegar da URL (GET)
+    mostrar_inativas = request.args.get('mostrar_inativas')
+    
+    # 2. Se veio do POST, pega do formulário
+    if mostrar_inativas is None and request.method == 'POST':
+        mostrar_inativas = request.form.get('mostrar_inativas')
+    
+    # 3. Se ainda não tem, pega da sessão
+    if mostrar_inativas is None:
+        mostrar_inativas = session.get('mostrar_inativas', '0')
+    
+    # 4. Salva na sessão para manter
+    session['mostrar_inativas'] = mostrar_inativas
+    
+
     with sqlite3.connect(caminho_banco) as conexao_banco:
         cursor = conexao_banco.cursor()
 
@@ -44,10 +61,18 @@ def ini_tarefas():
         
         params = [session['user_id']]
         
-        # QUERY DATA INICIO E FIM
+        # QUERY FILTRO DATA
         if data_inicio and data_fim:
-            query += " AND t.data_inicio BETWEEN ? AND ?"
-            params.extend([data_inicio, data_fim])
+            if tipo_data == 'inicio':
+                query += " AND t.data_inicio BETWEEN ? AND ?"
+                params.extend([data_inicio, data_fim])
+            elif tipo_data == 'final':
+                query += " AND t.data_final BETWEEN ? AND ?"
+                params.extend([data_inicio, data_fim])
+            else:  # finalizacao
+                # Para data_finalizacao (que tem hora), compara apenas a data
+                query += " AND DATE(t.data_finalizacao) BETWEEN ? AND ?"
+                params.extend([data_inicio, data_fim])
 
 
         # QUERY FILTRO CATEGORIAS
@@ -96,6 +121,15 @@ def ini_tarefas():
             params.append(f"%{descricao_filtro}%")
 
                 
+        # FILTRO ATIVO/INATIVO
+        if mostrar_inativas == '1':
+            query += " AND t.ativo = 0"      # Só inativas
+        elif mostrar_inativas == '2':
+            pass                              # Todas (não adiciona filtro)
+        else:
+            query += " AND t.ativo = 1"      # Só ativas (padrão)
+
+
         query += " ORDER BY t.tarefa_sequencia ASC"
         cursor.execute(query, params)
         tarefas = cursor.fetchall()
@@ -106,6 +140,8 @@ def ini_tarefas():
                            data_hoje=data_hoje,
                            data_inicio=data_inicio,
                            data_fim=data_fim,
+                           tipo_data=tipo_data,
+                           mostrar_inativas=mostrar_inativas,
                            categorias_usuario=categorias_usuario, categorias_filtro=categorias_filtro,
                            status_filtro=status_filtro,
                            prioridade_filtro=prioridade_filtro,
@@ -154,14 +190,17 @@ def detalhes_tarefa(tarefa_seq):
         }
 
 
-
-
-# FUNÇÃO DE CONCLUIR TAREFA
+# FUNÇÃO DE CONCLUIR TAREFA (COM AUDITORIA)
 @bp_tela_tarefas.route('/concluir/<int:tarefa_seq>', methods=['POST'])
 @login_required
 def concluir_tarefa(tarefa_seq):
     with sqlite3.connect(caminho_banco) as conexao:
         cursor = conexao.cursor()
+        
+        # Busca dados da tarefa ANTES de concluir (para auditoria)
+        cursor.execute("SELECT titulo, descricao FROM tarefas WHERE tarefa_sequencia = ? AND user_id = ?", 
+                       (tarefa_seq, session['user_id']))
+        tarefa_antes = cursor.fetchone()
         
         # Usa horário local do servidor (Cuiabá GMT-4)
         cursor.execute('''
@@ -173,23 +212,52 @@ def concluir_tarefa(tarefa_seq):
         ''', (tarefa_seq, session['user_id']))
         
         conexao.commit()
+        
+        # REGISTRA AUDITORIA
+        if tarefa_antes:
+            AuditoriaService.registrar(
+                tarefa_id=tarefa_seq,
+                acao='concluida',
+                valor_novo=f"Tarefa '{tarefa_antes[0] or 'Sem título'}' concluída em {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+            )
 
         flash('Tarefa concluída com sucesso!', 'success')
         return redirect(url_for('tarefas.ini_tarefas'))
 
 
-# FUNÇÃO PARA EXCLUIR TAREFA
+# FUNÇÃO PARA EXCLUIR TAREFA (AGORA É INATIVAR - COM AUDITORIA)
 @bp_tela_tarefas.route('/excluir/<int:tarefa_seq>', methods=['POST'])
 @login_required
 def excluir_tarefa(tarefa_seq):
     with sqlite3.connect(caminho_banco) as conexao:
         cursor = conexao.cursor()
-
-        cursor.execute('DELETE FROM tarefas WHERE tarefa_sequencia = ? AND user_id = ?', (tarefa_seq, session['user_id'] ))
-
+        
+        # Busca dados da tarefa ANTES de inativar
+        cursor.execute("SELECT titulo, descricao FROM tarefas WHERE tarefa_sequencia = ? AND user_id = ?", 
+                       (tarefa_seq, session['user_id']))
+        tarefa_antes = cursor.fetchone()
+        
+        # INATIVA a tarefa (exclusão lógica) - NÃO DELETA!
+        cursor.execute('''
+            UPDATE tarefas 
+            SET ativo = 0, 
+                excluido_em = datetime('now', 'localtime'),
+                excluido_por = ?,
+                updated_at = datetime('now', 'localtime')
+            WHERE tarefa_sequencia = ? AND user_id = ?
+        ''', (session['user_id'], tarefa_seq, session['user_id']))
+        
         conexao.commit()
+        
+        # REGISTRA AUDITORIA
+        if tarefa_antes:
+            AuditoriaService.registrar(
+                tarefa_id=tarefa_seq,
+                acao='excluida',
+                valor_novo=f"Tarefa '{tarefa_antes[0] or 'Sem título'}' inativada"
+            )
 
-        flash('Tarefa excluída com sucesso!', 'success')
+        flash('Tarefa inativada com sucesso!', 'success')
         return redirect(url_for('tarefas.ini_tarefas'))
 
 
@@ -209,5 +277,6 @@ def limpar_filtros():
     session.pop('mes_corrente', None)
     session.pop('dia_corrente', None)
     session.pop('dia_referencia', None)
+    session.pop('mostrar_inativas', None)  # ← ADICIONAR
     
     return redirect(url_for('tarefas.ini_tarefas'))

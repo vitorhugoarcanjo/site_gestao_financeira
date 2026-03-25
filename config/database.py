@@ -20,6 +20,9 @@ from rotas.logs.logs_erros.tabela_erros import tabela_logs_erros
 from rotas.logs.logs_mensais_relatorio.tabela_logs_relatorio import tabela_logs_resumo_mensal
 from rotas.logs.logs_ataques.tabela import tabela_ataque
 
+# TABELAS AUDITORIA
+from rotas.auditoria_geral.pasta_tarefas.tabela import tabela_auditoria_tarefas
+
 def criar_todas_tabelas():
     conexao = sqlite3.connect(caminho_banco)
     cursor = conexao.cursor()
@@ -40,6 +43,9 @@ def criar_todas_tabelas():
     tabela_logs_erros(cursor)
     tabela_logs_resumo_mensal(cursor)
     tabela_ataque(cursor)
+
+    # AUDITORIA
+    tabela_auditoria_tarefas(cursor)
 
     # CRIA ÍNDICES
     criar_indices(cursor)

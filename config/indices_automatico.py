@@ -51,6 +51,17 @@ def criar_indices(cursor):
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_logs_ataques_ip ON logs_ataques(ip)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_logs_ataques_data_hora ON logs_ataques(data_hora)")
     
+
+    # ============================================
+    # AUDITORIA
+    # ============================================
+    print("  📜 Índices de auditoria...")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_auditoria_tarefa_id ON tarefas_auditoria(tarefa_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_auditoria_usuario_id ON tarefas_auditoria(usuario_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_auditoria_data_hora ON tarefas_auditoria(data_hora)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_auditoria_acao ON tarefas_auditoria(acao)")
+
+
     print("✅ Índices criados/verificados com sucesso!")
 
 def criar_todos_indices():

@@ -29,8 +29,18 @@ def criar_tabela_tarefas(cursor):
     else:
         # MODELO - ESTRUTURA
         cursor.execute("PRAGMA table_info(tarefas)")
-        if not any(col[1] == 'titulo' for col in cursor.fetchall()):
-            cursor.execute("ALTER TABLE tarefas ADD COLUMN titulo VARCHAR(200)")
-            print("✅ Coluna titulo adicionada em tarefas!")
+        if not any(col[1] == 'ativo' for col in cursor.fetchall()):
+            cursor.execute("ALTER TABLE tarefas ADD COLUMN ativo INTEGER DEFAULT 1")
+            print("✅ Coluna ativo adicionada em tarefas!")
+
+        cursor.execute("PRAGMA table_info(tarefas)")
+        if not any(col[1] == 'excluido_em' for col in cursor.fetchall()):
+            cursor.execute("ALTER TABLE tarefas ADD COLUMN excluido_em DATETIME")
+            print("✅ Coluna excluido_em adicionada em tarefas!")
+           
+        cursor.execute("PRAGMA table_info(tarefas)")
+        if not any(col[1] == 'excluido_por' for col in cursor.fetchall()):
+            cursor.execute("ALTER TABLE tarefas ADD COLUMN excluido_por INTEGER")
+            print("✅ Coluna excluido_por adicionada em tarefas!")
 
         print("ℹ️ Tabela tarefas já existe.")
