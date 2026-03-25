@@ -10,13 +10,14 @@ bp_auditoria = Blueprint('auditoria', __name__)
 def historico_tarefa(tarefa_seq):
     """Ver histórico de alterações de uma tarefa"""
     
-    # Pega os parâmetros da URL (vêm do link que clicou)
+    # Pega os parâmetros da URL
     mostrar_inativas = request.args.get('mostrar_inativas', '0')
     data_inicio = request.args.get('data_inicio')
     data_fim = request.args.get('data_fim')
     tipo_data = request.args.get('tipo_data', 'inicio')
     
-    historico = AuditoriaService.listar_por_tarefa(tarefa_seq)
+    # Usa o método formatado
+    historico = AuditoriaService.listar_por_tarefa_formatado(tarefa_seq)
     
     return render_template('pasta_auditoria/pasta_tarefas/auditoria_tarefas.html', 
                           historico=historico, 

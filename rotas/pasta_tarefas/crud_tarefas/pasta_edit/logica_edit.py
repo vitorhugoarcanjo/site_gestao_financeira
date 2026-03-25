@@ -1,8 +1,10 @@
 # rotas/pasta_tarefas/crud_tarefas/pasta_edit/logica_edit.py
-from flask import Blueprint, render_template, request, session, redirect, url_for
+from flask import Blueprint, render_template, request, session, redirect, url_for, flash
 import sqlite3, os
-
+import json
+from datetime import datetime
 from rotas.middleware.autenticacao import login_required
+from rotas.auditoria_geral.services_auditoria import AuditoriaService
 
 caminho_banco = os.path.join(os.getcwd(), 'instance', 'banco_de_dados.db')
 
@@ -17,7 +19,6 @@ def iniedittarefa(tarefa_seq):
     conexao = sqlite3.connect(caminho_banco)
     cursor = conexao.cursor()
 
-    # SELECT com título
     cursor.execute("""
         SELECT t.titulo, t.descricao, t.status, t.data_inicio, t.data_final, 
                t.categoria_id, t.prioridade, c.nome as categoria_nome, c.cor as categoria_cor
@@ -31,7 +32,7 @@ def iniedittarefa(tarefa_seq):
     todas_categorias = cursor.fetchall()
 
     if request.method == 'POST':
-        titulo = request.form.get('titulo', '')      # ← NOVO
+        titulo = request.form.get('titulo', '')
         descricao = request.form.get('descricao', '')
         status = request.form.get('status', '')
         data_inicio = request.form.get('data_inicio', '')
@@ -44,7 +45,15 @@ def iniedittarefa(tarefa_seq):
         else:
             categoria_id = int(categoria_id)
 
-        # UPDATE com título
+        # BUSCA DADOS ANTES
+        cursor.execute("""
+            SELECT titulo, descricao, status, prioridade 
+            FROM tarefas 
+            WHERE tarefa_sequencia = ? AND user_id = ?
+        """, (tarefa_seq, user_id))
+        dados_antes = cursor.fetchone()
+
+        # UPDATE
         cursor.execute('''
             UPDATE tarefas 
             SET titulo = ?, descricao = ?, status = ?, data_inicio = ?, 
@@ -54,7 +63,52 @@ def iniedittarefa(tarefa_seq):
         ''', (titulo, descricao, status, data_inicio, data_final, categoria_id, prioridade, tarefa_seq, user_id))
         
         conexao.commit()
+
+        # ===== AUDITORIA: REGISTRA UM ÚNICO REGISTRO COM TODAS AS MUDANÇAS =====
+        alteracoes = []
+        
+        status_map = {'pendente': '⏰ Pendente', 'em andamento': '⏳ Andamento', 'concluido': '✅ Concluído'}
+        prioridade_map = {'baixa': '🟢 Baixa', 'media': '🟡 Média', 'alta': '🔴 Alta'}
+
+        if dados_antes[0] != titulo:
+            alteracoes.append({
+                'campo': 'título',
+                'antes': dados_antes[0],
+                'depois': titulo
+            })
+
+        if dados_antes[1] != descricao:
+            alteracoes.append({
+                'campo': 'descrição',
+                'antes': dados_antes[1][:100] + "..." if dados_antes[1] and len(dados_antes[1]) > 100 else dados_antes[1],
+                'depois': descricao[:100] + "..." if descricao and len(descricao) > 100 else descricao
+            })
+
+        if dados_antes[2] != status:
+            alteracoes.append({
+                'campo': 'status',
+                'antes': status_map.get(dados_antes[2], dados_antes[2]),
+                'depois': status_map.get(status, status)
+            })
+
+        if dados_antes[3] != prioridade:
+            alteracoes.append({
+                'campo': 'prioridade',
+                'antes': prioridade_map.get(dados_antes[3], dados_antes[3]),
+                'depois': prioridade_map.get(prioridade, prioridade)
+            })
+
+        if alteracoes:
+            AuditoriaService.registrar(
+                tarefa_id=tarefa_seq,
+                acao='editada',
+                campo_alterado='múltiplos',
+                valor_antigo=None,
+                valor_novo=json.dumps(alteracoes, ensure_ascii=False)  # ← JSON com todas alterações
+            )
+        
         conexao.close()
+        flash('Tarefa atualizada com sucesso!', 'success')
         return redirect(url_for('tarefas.ini_tarefas'))
     
     if not tarefa:
